@@ -6,7 +6,7 @@
   --color-ink: #0E0E0E;
   --color-ink-soft: #1F1F1F;
   --color-rule: #0E0E0E;
-  --color-mute: #7A7A75;
+  --color-mute: #595951;
   --color-accent: #E63312;
 
   --font-display: var(--font-fraunces);
@@ -28,7 +28,7 @@
     --color-ink: #F2EDE3;
     --color-ink-soft: #FAFAF7;
     --color-rule: #F2EDE3;
-    --color-mute: #7A7A75;
+    --color-mute: #595951;
   }
 
   html,

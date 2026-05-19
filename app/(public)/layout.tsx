@@ -30,7 +30,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         </div>
       </header>
 
-      {children}
+      <main id="main">{children}</main>
 
       <footer
         className="mono"
@@ -48,7 +48,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         <span>
           <a
             href="https://anefi.vc"
-            style={{ color: "var(--color-accent)", textDecoration: "none" }}
+            style={{ color: "var(--color-accent)", textDecoration: "underline", textUnderlineOffset: "0.2em" }}
           >
             anefi.vc
           </a>

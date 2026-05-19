@@ -1,14 +1,15 @@
 import { fetchCompaniesSummary } from "@/lib/notion/companies";
 
+function formatFreshness(hours: number | null): string {
+  if (hours == null) return "—";
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.round(hours / 24)}d ago`;
+}
+
 export async function Marquee() {
   const s = await fetchCompaniesSummary();
   const freshness = s.freshestSignalAgeHours;
-  const freshnessText =
-    freshness == null
-      ? "—"
-      : freshness < 24
-        ? `${freshness}h ago`
-        : `${Math.round(freshness / 24)}d ago`;
+  const freshnessText = formatFreshness(freshness);
 
   return (
     <div

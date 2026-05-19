@@ -156,7 +156,7 @@ export default function Landing() {
             <b style={{ color: "var(--color-ink)", fontWeight: 500 }}>Sevda Anefi</b> ·{" "}
             <a
               href="https://anefi.vc"
-              style={{ color: "var(--color-accent)", textDecoration: "none" }}
+              style={{ color: "var(--color-accent)", textDecoration: "underline", textUnderlineOffset: "0.2em" }}
             >
               anefi.vc
             </a>
