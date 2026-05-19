@@ -1,15 +1,26 @@
 import { z } from "zod";
 
 // SSI v3.0 thesis taxonomy (Methodology page e29a4e77-e168-41c8-9901-fc2beee52c4e, verified 19 May 2026).
-export const ThesisEnum = z.enum([
-  "Governed Agentic Ops",
-  "Vertical SoR AI",
-  "Both",
-]);
-export type Thesis = z.infer<typeof ThesisEnum>;
+// Accept common label variants from the real DB. Unknown → defaults to GAO so the portrait still renders.
+const THESIS_NORMALIZE: Record<string, "Governed Agentic Ops" | "Vertical SoR AI" | "Both"> = {
+  "Governed Agentic Ops": "Governed Agentic Ops",
+  "GAO": "Governed Agentic Ops",
+  "Vertical SoR AI": "Vertical SoR AI",
+  "Vertical System-of-Record AI": "Vertical SoR AI",
+  "VSRAI": "Vertical SoR AI",
+  "Both": "Both",
+};
+export const ThesisEnum = z
+  .union([
+    z.enum(["Governed Agentic Ops", "Vertical SoR AI", "Both"]),
+    z.string().transform((s) => THESIS_NORMALIZE[s] ?? "Governed Agentic Ops"),
+  ]);
+export type Thesis = "Governed Agentic Ops" | "Vertical SoR AI" | "Both";
 
-// Companies DB Sector taxonomy (12 values per PRD §7).
-export const SectorEnum = z.enum([
+// Companies DB Sector taxonomy. PRD §7 listed 12 values; the real DB evolves.
+// We keep the constant array as a TS-side hint for the UI filter chips but
+// the schema accepts any string so new Notion values never break parsing.
+export const KNOWN_SECTORS = [
   "AI Governance",
   "FinServices AI",
   "MedTech AI",
@@ -22,30 +33,32 @@ export const SectorEnum = z.enum([
   "Climate AI",
   "Public Sector AI",
   "Other",
-]);
-export type Sector = z.infer<typeof SectorEnum>;
+] as const;
+export type Sector = string;
 
-export const StageEnum = z.enum([
+export const KNOWN_STAGES = [
   "Pre-Seed",
   "Seed",
   "Series A",
   "Series B",
   "Growth",
-]);
-export type Stage = z.infer<typeof StageEnum>;
+] as const;
+export type Stage = string;
 
-export const SignalTierEnum = z.enum([
+export const KNOWN_SIGNAL_TIERS = [
   "🔴 Highest Conviction",
   "🟠 Strong",
   "🟡 Emerging",
   "⚪ Watchlist",
-]);
-export type SignalTier = z.infer<typeof SignalTierEnum>;
+] as const;
+export type SignalTier = string;
 
-export const PriorityEnum = z.enum(["P0", "P1", "P2", "P3"]);
+// Priority MUST stay strict — we dispatch on this for tier-rank ordering
+// and the gallery P0 chip styling. Unknown values fall through to P3.
+export const PriorityEnum = z.enum(["P0", "P1", "P2", "P3"]).catch("P3");
 export type Priority = z.infer<typeof PriorityEnum>;
 
-export const DiscoverySourceEnum = z.enum([
+export const KNOWN_DISCOVERY_SOURCES = [
   "regscan",
   "ghscan",
   "procscan",
@@ -55,45 +68,41 @@ export const DiscoverySourceEnum = z.enum([
   "grantscan",
   "patentscan",
   "spinoutscan",
-]);
-export type DiscoverySource = z.infer<typeof DiscoverySourceEnum>;
+] as const;
+export type DiscoverySource = string;
 
-export const FalsifierCheckEnum = z.enum([
-  "✅ Clean",
-  "❌ Triggered",
-  "⏳ Not Run",
-]);
+// Falsifier — strict-ish: dispatch on "❌ Triggered" for mute. Unknown → Not Run.
+export const FalsifierCheckEnum = z
+  .enum(["✅ Clean", "❌ Triggered", "⏳ Not Run"])
+  .catch("⏳ Not Run");
 export type FalsifierCheck = z.infer<typeof FalsifierCheckEnum>;
 
-export const AntithesisFilterEnum = z.enum([
-  "Clear",
-  "1 Flag",
-  "Auto-pass",
-  "Not Run",
-]);
+// Anti-thesis — strict-ish: dispatch on "Auto-pass" for mute. Unknown → Not Run.
+export const AntithesisFilterEnum = z
+  .enum(["Clear", "1 Flag", "Auto-pass", "Not Run"])
+  .catch("Not Run");
 export type AntithesisFilter = z.infer<typeof AntithesisFilterEnum>;
 
-export const SourceConfidenceEnum = z.enum(["High", "Medium", "Low"]);
-export type SourceConfidence = z.infer<typeof SourceConfidenceEnum>;
+export type SourceConfidence = string;
 
 export const CompanySchema = z.object({
   id: z.string().min(1),
   company: z.string().min(1),
   slug: z.string().min(1),
   thesis: ThesisEnum,
-  sector: SectorEnum,
-  stage: StageEnum,
+  sector: z.string().default("Other"),
+  stage: z.string().default("Seed"),
   hq: z.string().nullable().default(""),
   headcount: z.number().int().nullable().default(null),
   founded: z.number().int().nullable().default(null),
   lastRaise: z.string().nullable().default(""),
   ssiScore: z.number().min(0).max(100),
-  signalTier: SignalTierEnum,
+  signalTier: z.string().default("⚪ Watchlist"),
   priority: PriorityEnum,
-  discoverySource: DiscoverySourceEnum,
+  discoverySource: z.string().default("manual"),
   falsifierCheck: FalsifierCheckEnum,
   antithesisFilter: AntithesisFilterEnum,
-  sourceConfidence: SourceConfidenceEnum,
+  sourceConfidence: z.string().default("Medium"),
   oneLiner: z.string().nullable().default(""),
   keySignal30d: z.string().nullable().default(""),
   catalystWindowDays: z.number().int().nullable().default(null),

@@ -44,7 +44,32 @@ function readSelect(prop: NotionProp | undefined): string | null {
     const v = prop.status as { name: string } | null;
     return v?.name ?? null;
   }
+  if (prop.type === "multi_select") {
+    const arr = prop.multi_select as Array<{ name: string }>;
+    return arr.length > 0 ? arr[0].name : null;
+  }
   return null;
+}
+
+function readMultiSelect(prop: NotionProp | undefined): string[] {
+  if (!prop) return [];
+  if (prop.type === "multi_select") {
+    const arr = prop.multi_select as Array<{ name: string }>;
+    return arr.map((x) => x.name);
+  }
+  if (prop.type === "select") {
+    const v = prop.select as { name: string } | null;
+    return v ? [v.name] : [];
+  }
+  return [];
+}
+
+/** Normalize labels like "P2 — This Month" → "P2", "🔴 Highest Conviction — top tier" → "🔴 Highest Conviction". */
+function trimRichLabel(s: string | null): string | null {
+  if (!s) return s;
+  // Split on em dash or double-hyphen and take the head
+  const head = s.split(/\s+[—–-]{1,2}\s+/)[0]?.trim() ?? s.trim();
+  return head;
 }
 
 function readNumber(prop: NotionProp | undefined): number | null {
@@ -76,24 +101,39 @@ export function mapCompany(raw: {
   const relCatalyst = readRelation(p["Primary Catalyst"]);
   const relMM = readRelation(p["Market Map Sub-Segment"]);
 
+  // Thesis is multi_select in the live DB. If a company is tagged with both
+  // theses, we surface it as "Both". Otherwise take the single tag, or
+  // default to GAO if untagged.
+  const thesisTags = readMultiSelect(p["Thesis"]);
+  let thesisValue = "Governed Agentic Ops";
+  if (thesisTags.length >= 2) thesisValue = "Both";
+  else if (thesisTags.length === 1) thesisValue = thesisTags[0]!;
+
+  // SSI Score falls back to Adjusted SSI then Seed SSI if the primary is null.
+  const ssi =
+    readNumber(p["SSI Score"]) ??
+    readNumber(p["Adjusted SSI"]) ??
+    readNumber(p["Seed SSI"]) ??
+    0;
+
   return CompanySchema.parse({
     id: raw.id,
     company: name,
     slug,
-    thesis: readSelect(p["Thesis"]) ?? "Governed Agentic Ops",
+    thesis: thesisValue,
     sector: readSelect(p["Sector"]) ?? "Other",
-    stage: readSelect(p["Stage"]) ?? "Seed",
+    stage: trimRichLabel(readSelect(p["Stage"])) ?? "Seed",
     hq: readString(p["HQ"]),
     headcount: readNumber(p["Headcount"]),
     founded: readNumber(p["Founded"]),
     lastRaise: readString(p["Last Raise"]),
-    ssiScore: readNumber(p["SSI Score"]) ?? 0,
-    signalTier: readSelect(p["Signal Tier"]) ?? "⚪ Watchlist",
-    priority: readSelect(p["Priority"]) ?? "P3",
-    discoverySource: readSelect(p["Discovery Source"]) ?? "manual",
-    falsifierCheck: readSelect(p["Falsifier Check"]) ?? "⏳ Not Run",
-    antithesisFilter: readSelect(p["Anti-thesis Filter"]) ?? "Not Run",
-    sourceConfidence: readSelect(p["Source confidence"]) ?? "Medium",
+    ssiScore: ssi,
+    signalTier: trimRichLabel(readSelect(p["Signal Tier"])) ?? "⚪ Watchlist",
+    priority: trimRichLabel(readSelect(p["Priority"])) ?? "P3",
+    discoverySource: trimRichLabel(readSelect(p["Discovery Source"])) ?? "manual",
+    falsifierCheck: trimRichLabel(readSelect(p["Falsifier Check"])) ?? "⏳ Not Run",
+    antithesisFilter: trimRichLabel(readSelect(p["Anti-thesis Filter"])) ?? "Not Run",
+    sourceConfidence: trimRichLabel(readSelect(p["Source confidence"])) ?? "Medium",
     oneLiner: readString(p["One-liner"]),
     keySignal30d: readString(p["Key Signal 30d"]),
     catalystWindowDays: readNumber(p["Catalyst Window (days)"]),

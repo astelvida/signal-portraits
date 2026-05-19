@@ -31,9 +31,9 @@ export async function fetchCompanies(): Promise<Company[]> {
     for (const row of page.results) {
       try {
         all.push(mapCompany(row));
-      } catch {
-        // Skip rows that fail validation but log them.
-        console.warn(`[notion] failed to parse company ${row.id}`);
+      } catch (err) {
+        const msg = err instanceof Error ? err.message : String(err);
+        console.warn(`[notion] failed to parse company ${row.id}: ${msg.slice(0, 300)}`);
       }
     }
     cursor = page.next_cursor ?? undefined;
