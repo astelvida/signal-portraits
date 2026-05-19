@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-warm-white: #FAFAF7;
+  --color-warm-cream: #F2EDE3;
+  --color-ink: #0E0E0E;
+  --color-ink-soft: #1F1F1F;
+  --color-rule: #0E0E0E;
+  --color-mute: #7A7A75;
+  --color-accent: #E63312;
+
+  --font-display: var(--font-fraunces);
+  --font-ui: var(--font-dm-sans);
+  --font-mono: var(--font-jetbrains-mono);
+
+  --spacing-grid: 4px;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    --color-warm-white: #0E0E0E;
+    --color-warm-cream: #1F1F1F;
+    --color-ink: #F2EDE3;
+    --color-ink-soft: #FAFAF7;
+    --color-rule: #F2EDE3;
+    --color-mute: #7A7A75;
+  }
+
+  html,
+  body {
+    background: var(--color-warm-white);
+    color: var(--color-ink);
+    font-family: var(--font-ui), system-ui, sans-serif;
+    line-height: 1.45;
+    font-feature-settings: "ss01", "cv01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-warm-white);
+  }
+}
+
+@utility mono {
+  font-family: var(--font-mono), ui-monospace, monospace;
+  font-feature-settings: "tnum";
+}
+
+@utility display {
+  font-family: var(--font-display), Georgia, serif;
+  font-optical-sizing: auto;
+}
+
+@utility hairline {
+  border-color: var(--color-rule);
+  border-width: 1px;
+}
+
+@utility hairline-thick {
+  border-color: var(--color-rule);
+  border-width: 2px;
+}

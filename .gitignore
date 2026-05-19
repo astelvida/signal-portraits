@@ -1,0 +1,34 @@
+# Node
+node_modules/
+.pnpm-store/
+
+# Next.js
+.next/
+out/
+build/
+next-env.d.ts
+
+# Vercel
+.vercel
+
+# Env
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.idea/
+.vscode/
+
+# Test
+coverage/
+*.log
+.claude/voice-audit.log
+
+# QA artifacts that aren't worth committing
+qa/screenshots/*.png
+!qa/screenshots/.gitkeep

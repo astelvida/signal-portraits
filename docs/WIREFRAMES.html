@@ -1,0 +1,901 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Signal Portraits — Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght,SOFT@9..144,300..800,0..100&family=DM+Sans:opsz,wght@9..40,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap">
+<style>
+  :root{
+    --warm-white:#FAFAF7;
+    --warm-cream:#F2EDE3;
+    --ink:#0E0E0E;
+    --ink-soft:#1F1F1F;
+    --rule:#0E0E0E;
+    --mute:#7A7A75;
+    --accent:#E63312;
+    --accent-ink:#0E0E0E;
+    --grid: 4px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:var(--warm-white);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.45;font-feature-settings:"ss01","cv01","cv11"}
+  body{padding:48px 32px 96px;max-width:1400px;margin:0 auto}
+  .display{font-family:"Fraunces",Georgia,serif;font-optical-sizing:auto;font-variation-settings:"opsz" 144}
+  .mono{font-family:"JetBrains Mono",ui-monospace,monospace;font-feature-settings:"tnum"}
+  .label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute)}
+  .rule{height:1px;background:var(--rule)}
+  .rule-thick{height:2px;background:var(--rule)}
+  .accent{color:var(--accent)}
+  .row{display:flex;gap:32px;align-items:flex-start}
+
+  /* HEADER */
+  header.global{display:flex;justify-content:space-between;align-items:flex-end;padding-bottom:16px;border-bottom:2px solid var(--ink);margin-bottom:48px}
+  header.global .wordmark{font-family:"Fraunces",serif;font-size:34px;font-weight:600;font-style:italic;letter-spacing:-0.02em}
+  header.global .wordmark .dot{color:var(--accent)}
+  header.global .meta{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);text-align:right;line-height:1.6}
+  header.global .meta b{color:var(--ink);font-weight:600}
+
+  /* SECTION HEADS */
+  .section-head{display:flex;align-items:baseline;gap:16px;margin:64px 0 16px}
+  .section-head .num{font-family:"JetBrains Mono",monospace;font-size:13px;color:var(--accent);font-weight:500}
+  .section-head h2{font-family:"Fraunces",serif;font-size:32px;font-weight:500;letter-spacing:-0.015em;line-height:1.1}
+  .section-head .note{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);margin-left:auto}
+
+  /* DEVICE FRAMES */
+  .frame{border:1px solid var(--ink);background:var(--warm-white);position:relative}
+  .frame .urlbar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute)}
+  .frame .urlbar .dot3{display:flex;gap:5px}
+  .frame .urlbar .dot3 i{width:8px;height:8px;border-radius:50%;background:transparent;border:1px solid var(--ink);display:inline-block}
+  .frame .urlbar .url{margin-left:8px}
+  .frame .urlbar .url b{color:var(--ink)}
+  .frame .viewport{padding:0;background:var(--warm-white)}
+  .desktop{width:100%;max-width:1280px;margin:0 auto}
+  .mobile{width:380px}
+
+  /* LANDING */
+  .landing-hero{display:grid;grid-template-columns:1.2fr 1fr;gap:0;border-bottom:1px solid var(--ink)}
+  .landing-hero .left{padding:64px 48px 56px;border-right:1px solid var(--ink);position:relative}
+  .landing-hero .left .kicker{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;margin-bottom:32px}
+  .landing-hero .left h1{font-family:"Fraunces",serif;font-size:64px;font-weight:400;line-height:0.98;letter-spacing:-0.025em;margin-bottom:24px}
+  .landing-hero .left h1 em{font-style:italic;color:var(--accent)}
+  .landing-hero .left p.lede{font-family:"Fraunces",serif;font-size:20px;font-weight:300;line-height:1.4;max-width:48ch;color:var(--ink-soft)}
+  .landing-hero .left .author{margin-top:48px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute)}
+  .landing-hero .left .author b{color:var(--ink);font-weight:500}
+
+  .landing-hero .right{padding:0;display:flex;align-items:center;justify-content:center;background:var(--warm-white);position:relative;min-height:560px}
+  .landing-hero .right .portrait-meta{position:absolute;top:24px;left:24px;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute);line-height:1.7}
+  .landing-hero .right .portrait-meta b{color:var(--ink);font-weight:500}
+  .landing-hero .right .portrait-foot{position:absolute;bottom:24px;left:24px;right:24px;display:flex;justify-content:space-between;align-items:baseline;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute)}
+  .landing-hero .right .portrait-foot .name{font-family:"Fraunces",serif;font-style:italic;font-size:16px;color:var(--ink)}
+  .landing-hero .right .portrait-foot .score{color:var(--accent);font-weight:600;font-size:14px}
+
+  /* PORTRAIT SVG container */
+  .portrait-svg{width:80%;aspect-ratio:1;display:block}
+
+  /* MARQUEE */
+  .marquee{display:flex;gap:48px;padding:14px 24px;border-bottom:1px solid var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);white-space:nowrap;overflow:hidden}
+  .marquee b{color:var(--ink);font-weight:500}
+  .marquee .accent{color:var(--accent)}
+
+  /* THESIS BLOCK */
+  .thesis{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--ink)}
+  .thesis .col{padding:48px 40px;border-right:1px solid var(--ink)}
+  .thesis .col:last-child{border-right:none}
+  .thesis .col .tag{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:16px}
+  .thesis .col h3{font-family:"Fraunces",serif;font-size:34px;font-weight:400;letter-spacing:-0.015em;line-height:1.1;margin-bottom:16px}
+  .thesis .col p{font-size:15px;line-height:1.55;color:var(--ink-soft);max-width:48ch}
+  .thesis .col .visual-stub{margin-top:24px;height:160px;display:flex;align-items:center;justify-content:center}
+
+  /* GALLERY */
+  .gallery-toolbar{display:flex;align-items:center;gap:32px;padding:16px 32px;border-bottom:1px solid var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px}
+  .gallery-toolbar .group{display:flex;gap:14px;align-items:center}
+  .gallery-toolbar .group b{color:var(--mute);font-weight:500;letter-spacing:.06em;text-transform:uppercase;font-size:10px}
+  .gallery-toolbar .chip{padding:4px 10px;border:1px solid var(--ink);background:var(--warm-white);cursor:pointer}
+  .gallery-toolbar .chip.active{background:var(--ink);color:var(--warm-white)}
+  .gallery-toolbar .chip.accent{border-color:var(--accent);color:var(--accent)}
+  .gallery-toolbar .right{margin-left:auto;color:var(--mute)}
+
+  .gallery-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+  .card{border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:24px;display:flex;flex-direction:column;cursor:pointer;background:var(--warm-white);position:relative;aspect-ratio:1}
+  .card:nth-child(4n){border-right:none}
+  .card .top{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute);letter-spacing:.04em}
+  .card .top .tier{color:var(--ink)}
+  .card .top .tier.p0{color:var(--accent);font-weight:600}
+  .card .canvas{flex:1;display:flex;align-items:center;justify-content:center;margin:0 -8px}
+  .card .bottom{display:flex;justify-content:space-between;align-items:baseline}
+  .card .bottom .name{font-family:"Fraunces",serif;font-style:italic;font-size:18px;color:var(--ink);line-height:1.1}
+  .card .bottom .score{font-family:"JetBrains Mono",monospace;font-size:13px;font-weight:600;color:var(--accent)}
+  .card.mute .bottom .score{color:var(--mute)}
+  .card.mute{opacity:.55}
+
+  /* PORTRAIT DETAIL */
+  .detail{display:grid;grid-template-columns:2fr 1fr;min-height:720px}
+  .detail .stage{padding:48px;border-right:1px solid var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative}
+  .detail .stage .stage-meta{position:absolute;top:24px;left:32px;right:32px;display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute);letter-spacing:.04em}
+  .detail .stage .stage-meta b{color:var(--ink);font-weight:500}
+  .detail .stage .stage-portrait{width:80%;max-width:520px;aspect-ratio:1}
+  .detail .stage .keys{position:absolute;bottom:20px;left:32px;display:flex;gap:18px;font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute)}
+  .detail .stage .keys kbd{display:inline-block;border:1px solid var(--ink);padding:1px 6px;margin-right:4px;color:var(--ink);background:var(--warm-white)}
+
+  .detail .sidebar{padding:48px 40px;display:flex;flex-direction:column;gap:32px;overflow-y:auto}
+  .detail .sidebar .head .one-liner{font-family:"Fraunces",serif;font-size:14px;font-style:italic;color:var(--mute);margin-bottom:14px;max-width:38ch;line-height:1.4}
+  .detail .sidebar h1{font-family:"Fraunces",serif;font-size:46px;font-weight:400;line-height:0.98;letter-spacing:-0.02em;margin-bottom:8px}
+  .detail .sidebar .ssi-row{display:flex;align-items:baseline;gap:14px;margin-top:14px}
+  .detail .sidebar .ssi-row .num{font-family:"Fraunces",serif;font-size:64px;font-weight:500;color:var(--accent);line-height:0.9;font-feature-settings:"tnum"}
+  .detail .sidebar .ssi-row .tag{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em}
+  .detail .sidebar .ssi-row .tier{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--accent);font-weight:600;align-self:flex-end;padding-bottom:6px}
+
+  .detail .sidebar .meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px 24px;font-family:"JetBrains Mono",monospace;font-size:11px;border-top:1px solid var(--ink);padding-top:24px}
+  .detail .sidebar .meta-grid .k{color:var(--mute);text-transform:uppercase;letter-spacing:.06em;font-size:10px;margin-bottom:2px}
+  .detail .sidebar .meta-grid .v{color:var(--ink);font-weight:500}
+
+  .detail .sidebar .signals{border-top:1px solid var(--ink);padding-top:24px}
+  .detail .sidebar .signals h4{font-family:"JetBrains Mono",monospace;font-size:11px;color:var(--mute);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;font-weight:500}
+  .detail .sidebar .signals .signal{display:flex;gap:10px;padding:8px 0;border-bottom:1px dashed var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px}
+  .detail .sidebar .signals .signal:last-child{border-bottom:none}
+  .detail .sidebar .signals .signal .dot{width:6px;height:6px;background:var(--accent);margin-top:5px;flex-shrink:0}
+  .detail .sidebar .signals .signal .date{color:var(--mute);min-width:74px}
+  .detail .sidebar .signals .signal .txt{color:var(--ink)}
+
+  .detail .sidebar .actions{display:flex;gap:8px;border-top:1px solid var(--ink);padding-top:24px}
+  .detail .sidebar .actions a{flex:1;padding:10px 14px;border:1px solid var(--ink);text-align:center;font-family:"JetBrains Mono",monospace;font-size:11px;text-decoration:none;color:var(--ink);background:var(--warm-white)}
+  .detail .sidebar .actions a.primary{background:var(--ink);color:var(--warm-white)}
+
+  /* XRAY mode */
+  .xray-stage{position:relative}
+  .xray-stage .portrait-faded{opacity:.15}
+  .xray-stage .xray-overlay{position:absolute;inset:24px;padding:32px;display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--ink);background:rgba(250,250,247,.85);backdrop-filter:blur(1px)}
+  .xray-stage .xray-overlay .dim{padding:14px 16px;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);font-family:"JetBrains Mono",monospace;font-size:11px}
+  .xray-stage .xray-overlay .dim:nth-child(2n){border-right:none}
+  .xray-stage .xray-overlay .dim:nth-last-child(-n+2){border-bottom:none}
+  .xray-stage .xray-overlay .dim .name{color:var(--mute);text-transform:uppercase;letter-spacing:.06em;font-size:10px;margin-bottom:4px}
+  .xray-stage .xray-overlay .dim .score{font-family:"Fraunces",serif;font-size:24px;font-weight:500;color:var(--ink);font-feature-settings:"tnum"}
+  .xray-stage .xray-overlay .dim .score b{color:var(--accent)}
+  .xray-stage .xray-overlay .dim .bar{height:3px;background:var(--warm-cream);margin-top:6px;position:relative}
+  .xray-stage .xray-overlay .dim .bar i{position:absolute;left:0;top:0;height:100%;background:var(--accent);display:block}
+  .xray-stage .xray-overlay .dim .ev{margin-top:6px;font-size:10px;color:var(--mute);line-height:1.4}
+
+  /* MOBILE WIREFRAMES */
+  .mobiles{display:flex;gap:24px;flex-wrap:wrap}
+  .mobile .viewport{height:760px;overflow:hidden}
+  .mobile .url{font-size:9px}
+  .mobile .status{padding:6px 14px;background:var(--ink);color:var(--warm-white);font-family:"JetBrains Mono",monospace;font-size:9px;display:flex;justify-content:space-between}
+  .mobile .m-hero{padding:32px 20px 24px}
+  .mobile .m-hero .kicker{font-family:"JetBrains Mono",monospace;font-size:9px;color:var(--accent);letter-spacing:.08em;text-transform:uppercase;margin-bottom:20px}
+  .mobile .m-hero h1{font-family:"Fraunces",serif;font-size:36px;font-weight:400;line-height:1;letter-spacing:-0.02em;margin-bottom:14px}
+  .mobile .m-hero h1 em{font-style:italic;color:var(--accent)}
+  .mobile .m-hero p{font-family:"Fraunces",serif;font-size:14px;line-height:1.4;color:var(--ink-soft)}
+  .mobile .m-portrait{display:flex;align-items:center;justify-content:center;padding:16px 32px;border-top:1px solid var(--ink);border-bottom:1px solid var(--ink)}
+  .mobile .m-foot{display:flex;justify-content:space-between;padding:14px 20px;font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute)}
+  .mobile .m-foot .name{font-family:"Fraunces",serif;font-style:italic;font-size:14px;color:var(--ink)}
+  .mobile .m-foot .score{color:var(--accent);font-weight:600;font-size:12px}
+
+  /* mobile gallery */
+  .mobile .m-gallery{display:grid;grid-template-columns:1fr 1fr;border-top:1px solid var(--ink)}
+  .mobile .m-card{aspect-ratio:1;border-right:1px solid var(--ink);border-bottom:1px solid var(--ink);padding:10px;display:flex;flex-direction:column}
+  .mobile .m-card:nth-child(2n){border-right:none}
+  .mobile .m-card .top{display:flex;justify-content:space-between;font-family:"JetBrains Mono",monospace;font-size:8px;color:var(--mute)}
+  .mobile .m-card .top .tier.p0{color:var(--accent)}
+  .mobile .m-card .canvas{flex:1;display:flex;align-items:center;justify-content:center}
+  .mobile .m-card .bottom{display:flex;justify-content:space-between;align-items:baseline}
+  .mobile .m-card .bottom .nm{font-family:"Fraunces",serif;font-style:italic;font-size:11px}
+  .mobile .m-card .bottom .sc{font-family:"JetBrains Mono",monospace;font-size:10px;font-weight:600;color:var(--accent)}
+
+  /* footnotes */
+  .footnotes{margin-top:64px;padding-top:32px;border-top:2px solid var(--ink);display:grid;grid-template-columns:repeat(3,1fr);gap:32px}
+  .footnotes .col h5{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin-bottom:10px;font-weight:500}
+  .footnotes .col p{font-size:13px;color:var(--ink-soft);line-height:1.5}
+  .footnotes .col code{font-family:"JetBrains Mono",monospace;font-size:12px;color:var(--accent)}
+
+  .legend-text{font-family:"JetBrains Mono",monospace;font-size:10px;color:var(--mute);padding:14px 0}
+  .legend-text b{color:var(--ink);font-weight:500}
+
+</style>
+</head>
+<body>
+
+<header class="global">
+  <div class="wordmark">Signal Portraits<span class="dot">.</span></div>
+  <div class="meta">
+    <b>WIREFRAMES v1.0</b> · 19 May 2026<br>
+    portraits.anefi.vc · Sevda Anefi<br>
+    Brand: Signals Over Stories · Editorial-brutalist
+  </div>
+</header>
+
+<!-- 01 LANDING -->
+<div class="section-head">
+  <span class="num">01</span>
+  <h2>Landing — <em style="font-style:italic">portraits.anefi.vc</em></h2>
+  <span class="note">Desktop · 1280px · Light mode</span>
+</div>
+
+<div class="frame desktop">
+  <div class="urlbar">
+    <div class="dot3"><i></i><i></i><i></i></div>
+    <span class="url"><b>portraits.anefi.vc</b></span>
+  </div>
+  <div class="viewport">
+    <div class="landing-hero">
+      <div class="left">
+        <div class="kicker">European AI · two-thesis canon · SSI v3.0</div>
+        <h1>One portrait per <em>thesis-fit</em> European AI startup.</h1>
+        <p class="lede">Each artwork is the company's actual signal stack rendered as structure. No fixed hue. The visual language switches between Governed Agentic Ops and Vertical System-of-Record AI. The portrait moves when a new signal lands.</p>
+        <div class="author">
+          <b>Sevda Anefi</b> · <a style="color:var(--accent);text-decoration:none">anefi.vc</a><br>
+          Last verified 19 May 2026 · 64 portraits live · 11 P0
+        </div>
+      </div>
+      <div class="right">
+        <div class="portrait-meta">
+          <b>FEATURED · P0</b><br>
+          GAO · Banking · DORA<br>
+          SSI <b style="color:var(--accent)">87</b>
+        </div>
+        <!-- Featured GAO portrait -->
+        <svg class="portrait-svg" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <filter id="grain"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="2"/><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.04 0"/></filter>
+          </defs>
+          <!-- GAO: orbital rings + inner lattice -->
+          <g transform="translate(200 200)" fill="none" stroke="#0E0E0E" stroke-width="0.5">
+            <!-- orbital rings -->
+            <circle r="180" stroke-width="0.5"/>
+            <circle r="155" stroke-width="0.5"/>
+            <circle r="130" stroke-width="0.5"/>
+            <circle r="105" stroke-width="0.5"/>
+            <!-- ring labels (regulators) -->
+            <g font-family="JetBrains Mono" font-size="6" fill="#7A7A75">
+              <text x="180" y="-3">EU AI ACT</text>
+              <text x="-180" y="160" text-anchor="end">DORA</text>
+              <text x="155" y="155">NIS2</text>
+              <text x="-130" y="-10" text-anchor="end">CEN-CENELEC</text>
+            </g>
+          </g>
+          <!-- inner lattice 8x8 -->
+          <g transform="translate(135 135)" stroke="#0E0E0E" stroke-width="0.6">
+            <g>
+              <line x1="0" y1="0" x2="130" y2="0"/><line x1="0" y1="18.5" x2="130" y2="18.5"/>
+              <line x1="0" y1="37" x2="130" y2="37"/><line x1="0" y1="55.5" x2="130" y2="55.5"/>
+              <line x1="0" y1="74" x2="130" y2="74"/><line x1="0" y1="92.5" x2="130" y2="92.5"/>
+              <line x1="0" y1="111" x2="130" y2="111"/><line x1="0" y1="130" x2="130" y2="130"/>
+              <line x1="0" y1="0" x2="0" y2="130"/><line x1="18.5" y1="0" x2="18.5" y2="130"/>
+              <line x1="37" y1="0" x2="37" y2="130"/><line x1="55.5" y1="0" x2="55.5" y2="130"/>
+              <line x1="74" y1="0" x2="74" y2="130"/><line x1="92.5" y1="0" x2="92.5" y2="130"/>
+              <line x1="111" y1="0" x2="111" y2="130"/><line x1="130" y1="0" x2="130" y2="130"/>
+            </g>
+            <!-- anchor marks at lattice intersections -->
+            <g fill="#E63312">
+              <rect x="35" y="35" width="4" height="4"/>
+              <rect x="72" y="35" width="4" height="4"/>
+              <rect x="35" y="72" width="4" height="4"/>
+              <rect x="91" y="91" width="4" height="4"/>
+              <rect x="109" y="54" width="4" height="4"/>
+              <rect x="54" y="109" width="4" height="4"/>
+            </g>
+          </g>
+          <!-- core glyph -->
+          <g transform="translate(200 200)">
+            <polygon points="-12,0 0,-12 12,0 0,12" fill="none" stroke="#0E0E0E" stroke-width="1"/>
+            <polygon points="-6,0 0,-6 6,0 0,6" fill="#E63312"/>
+          </g>
+          <!-- corner ticks (investor signal) -->
+          <g stroke="#0E0E0E" stroke-width="0.8" fill="none">
+            <line x1="20" y1="20" x2="34" y2="20"/><line x1="20" y1="20" x2="20" y2="34"/>
+            <line x1="380" y1="20" x2="366" y2="20"/><line x1="380" y1="20" x2="380" y2="34"/>
+            <line x1="20" y1="380" x2="34" y2="380"/><line x1="20" y1="380" x2="20" y2="366"/>
+            <line x1="380" y1="380" x2="366" y2="380"/><line x1="380" y1="380" x2="380" y2="366"/>
+          </g>
+          <rect x="0" y="0" width="400" height="400" filter="url(#grain)"/>
+        </svg>
+        <div class="portrait-foot">
+          <span class="name">Acme Governance</span>
+          <span><span class="score">SSI 87</span> · 🔴 P0</span>
+        </div>
+      </div>
+    </div>
+    <div class="marquee">
+      <span><b>64</b> portraits</span>
+      <span><b>37</b> GAO · <b>23</b> VSRAI · <b>4</b> both</span>
+      <span><b>11</b> P0</span>
+      <span class="accent">↑ DORA enforcement window 0 days</span>
+      <span><b>EU AI Act</b> Annex III 75 days</span>
+      <span>Last signal landed <b>4h ago</b></span>
+    </div>
+    <div class="thesis">
+      <div class="col">
+        <div class="tag">Thesis I</div>
+        <h3>Governed Agentic Ops</h3>
+        <p>The deployment gateway for enterprise AI. Runtime governance, observability, evaluation, audit evidence, human oversight, policy enforcement. The companies that make autonomous workflows legal to run in regulated Europe.</p>
+        <div class="visual-stub">
+          <!-- mini GAO sample -->
+          <svg viewBox="0 0 160 160" width="160">
+            <g transform="translate(80 80)" fill="none" stroke="#0E0E0E" stroke-width="0.5">
+              <circle r="72"/><circle r="58"/><circle r="44"/>
+            </g>
+            <g transform="translate(54 54)" stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <rect x="0" y="0" width="52" height="52"/>
+              <line x1="13" y1="0" x2="13" y2="52"/><line x1="26" y1="0" x2="26" y2="52"/><line x1="39" y1="0" x2="39" y2="52"/>
+              <line x1="0" y1="13" x2="52" y2="13"/><line x1="0" y1="26" x2="52" y2="26"/><line x1="0" y1="39" x2="52" y2="39"/>
+              <rect x="11" y="11" width="3" height="3" fill="#E63312"/>
+              <rect x="37" y="24" width="3" height="3" fill="#E63312"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="col">
+        <div class="tag">Thesis II</div>
+        <h3>Vertical System-of-Record AI</h3>
+        <p>Workflow gravity beats model novelty. AI that becomes, extends, or controls the regulated workflow's system of record. Writes back, owns the evidence, accumulates proprietary domain data.</p>
+        <div class="visual-stub">
+          <!-- mini VSRAI sample -->
+          <svg viewBox="0 0 160 160" width="160">
+            <g stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <!-- core -->
+              <polygon points="80,50 95,65 80,80 65,65" stroke-width="1"/>
+              <polygon points="74,59 86,59 86,71 74,71" fill="#E63312" stroke="none"/>
+              <!-- lateral arms -->
+              <line x1="80" y1="65" x2="40" y2="50"/><line x1="80" y1="65" x2="120" y2="50"/>
+              <line x1="80" y1="65" x2="35" y2="75"/><line x1="80" y1="65" x2="125" y2="75"/>
+              <!-- root threads -->
+              <line x1="74" y1="80" x2="60" y2="140"/><line x1="80" y1="80" x2="80" y2="140"/>
+              <line x1="86" y1="80" x2="100" y2="140"/><line x1="70" y1="80" x2="42" y2="140"/>
+              <line x1="90" y1="80" x2="118" y2="140"/>
+              <!-- SoR plate -->
+              <line x1="20" y1="142" x2="140" y2="142" stroke-width="1.5"/>
+              <!-- root barbs -->
+              <line x1="58" y1="120" x2="63" y2="118"/><line x1="82" y1="120" x2="77" y2="118"/>
+              <line x1="98" y1="120" x2="103" y2="118"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-text"><b>Notes —</b> The wordmark is Fraunces 600 italic. The accent ․․․․․․․ vermillion #E63312 ․․․․․․․ appears only on the score, the active filter, and on hover. The marquee draws from <code>fetchCompaniesSummary()</code> at the edge. The featured-portrait slot rotates daily, selecting the highest-tier company with the freshest signal.</div>
+
+<!-- 02 GALLERY -->
+<div class="section-head">
+  <span class="num">02</span>
+  <h2><em style="font-style:italic">/gallery</em> — filter on thesis, sector, tier, catalyst</h2>
+  <span class="note">Desktop · the working surface</span>
+</div>
+
+<div class="frame desktop">
+  <div class="urlbar">
+    <div class="dot3"><i></i><i></i><i></i></div>
+    <span class="url">portraits.anefi.vc<b>/gallery</b></span>
+  </div>
+  <div class="viewport">
+    <div class="gallery-toolbar">
+      <div class="group">
+        <b>Thesis</b>
+        <span class="chip active">All</span>
+        <span class="chip">GAO</span>
+        <span class="chip">VSRAI</span>
+        <span class="chip">Both</span>
+      </div>
+      <div class="group">
+        <b>Tier</b>
+        <span class="chip accent">P0</span>
+        <span class="chip">P1</span>
+        <span class="chip">P2</span>
+        <span class="chip">P3</span>
+      </div>
+      <div class="group">
+        <b>Sector</b>
+        <span class="chip">FinServices</span>
+        <span class="chip">MedTech</span>
+        <span class="chip">Insurance</span>
+        <span class="chip">Legal</span>
+        <span class="chip">…</span>
+      </div>
+      <div class="right">Sort: <b style="color:var(--ink)">Last signal</b> ↓ · 64 portraits</div>
+    </div>
+    <div class="gallery-grid">
+
+      <!-- card 1 - GAO P0 -->
+      <div class="card">
+        <div class="top"><span>GAO · FINSERV</span><span class="tier p0">P0</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g transform="translate(80 80)" fill="none" stroke="#0E0E0E" stroke-width="0.5">
+              <circle r="68"/><circle r="54"/><circle r="40"/><circle r="26"/>
+            </g>
+            <g transform="translate(54 54)" stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <rect x="0" y="0" width="52" height="52"/>
+              <line x1="13" y1="0" x2="13" y2="52"/><line x1="26" y1="0" x2="26" y2="52"/><line x1="39" y1="0" x2="39" y2="52"/>
+              <line x1="0" y1="13" x2="52" y2="13"/><line x1="0" y1="26" x2="52" y2="26"/><line x1="0" y1="39" x2="52" y2="39"/>
+              <rect x="11" y="11" width="3" height="3" fill="#E63312"/>
+              <rect x="37" y="24" width="3" height="3" fill="#E63312"/>
+              <rect x="24" y="37" width="3" height="3" fill="#E63312"/>
+            </g>
+            <polygon transform="translate(80 80)" points="-5,0 0,-5 5,0 0,5" fill="#E63312"/>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Lattice.dev</span><span class="score">87</span></div>
+      </div>
+
+      <!-- card 2 - VSRAI P0 -->
+      <div class="card">
+        <div class="top"><span>VSRAI · MEDTECH</span><span class="tier p0">P0</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <polygon points="80,40 95,55 80,70 65,55" stroke-width="1"/>
+              <polygon points="74,49 86,49 86,61 74,61" fill="#E63312" stroke="none"/>
+              <line x1="80" y1="55" x2="30" y2="35"/><line x1="80" y1="55" x2="130" y2="35"/>
+              <line x1="80" y1="55" x2="25" y2="60"/><line x1="80" y1="55" x2="135" y2="60"/>
+              <line x1="72" y1="70" x2="50" y2="145"/><line x1="80" y1="70" x2="80" y2="145"/>
+              <line x1="88" y1="70" x2="110" y2="145"/><line x1="65" y1="70" x2="30" y2="145"/>
+              <line x1="95" y1="70" x2="130" y2="145"/>
+              <line x1="10" y1="147" x2="150" y2="147" stroke-width="1.5"/>
+              <!-- barbs (switching cost) -->
+              <line x1="46" y1="120" x2="52" y2="117"/><line x1="82" y1="120" x2="76" y2="117"/>
+              <line x1="106" y1="120" x2="112" y2="117"/><line x1="34" y1="110" x2="40" y2="107"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Aevia Clinical</span><span class="score">82</span></div>
+      </div>
+
+      <!-- card 3 - GAO P1 -->
+      <div class="card">
+        <div class="top"><span>GAO · AGENT-SEC</span><span class="tier">P1</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g transform="translate(80 80)" fill="none" stroke="#0E0E0E" stroke-width="0.5">
+              <circle r="62"/><circle r="48"/><circle r="34"/>
+            </g>
+            <g transform="translate(60 60)" stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <rect x="0" y="0" width="40" height="40"/>
+              <line x1="13" y1="0" x2="13" y2="40"/><line x1="26" y1="0" x2="26" y2="40"/>
+              <line x1="0" y1="13" x2="40" y2="13"/><line x1="0" y1="26" x2="40" y2="26"/>
+              <rect x="11" y="11" width="3" height="3" fill="#E63312"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Quorum Runtime</span><span class="score">71</span></div>
+      </div>
+
+      <!-- card 4 - VSRAI P1 -->
+      <div class="card">
+        <div class="top"><span>VSRAI · INSURTECH</span><span class="tier">P1</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g stroke="#0E0E0E" stroke-width="0.5" fill="none">
+              <polygon points="80,45 92,57 80,69 68,57" stroke-width="1"/>
+              <polygon points="76,53 84,53 84,61 76,61" fill="#E63312" stroke="none"/>
+              <line x1="80" y1="57" x2="40" y2="45"/><line x1="80" y1="57" x2="120" y2="45"/>
+              <line x1="75" y1="69" x2="55" y2="145"/><line x1="80" y1="69" x2="80" y2="145"/>
+              <line x1="85" y1="69" x2="105" y2="145"/>
+              <line x1="20" y1="147" x2="140" y2="147" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Sigma Claims</span><span class="score">68</span></div>
+      </div>
+
+      <!-- card 5 - both -->
+      <div class="card">
+        <div class="top"><span>BOTH · LEGAL</span><span class="tier">P1</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g fill="none" stroke="#0E0E0E" stroke-width="0.5">
+              <!-- upper lattice -->
+              <g transform="translate(60 30)">
+                <rect x="0" y="0" width="40" height="30"/>
+                <line x1="13" y1="0" x2="13" y2="30"/><line x1="26" y1="0" x2="26" y2="30"/>
+                <line x1="0" y1="10" x2="40" y2="10"/><line x1="0" y1="20" x2="40" y2="20"/>
+                <rect x="11" y="8" width="3" height="3" fill="#E63312"/>
+              </g>
+              <!-- lower roots -->
+              <line x1="68" y1="80" x2="50" y2="145"/><line x1="80" y1="80" x2="80" y2="145"/>
+              <line x1="92" y1="80" x2="110" y2="145"/>
+              <line x1="20" y1="147" x2="140" y2="147" stroke-width="1.5"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Auditline</span><span class="score">66</span></div>
+      </div>
+
+      <!-- card 6 - GAO P2 -->
+      <div class="card">
+        <div class="top"><span>GAO · REGTECH</span><span class="tier">P2</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g transform="translate(80 80)" fill="none" stroke="#0E0E0E" stroke-width="0.4">
+              <circle r="50"/><circle r="36"/>
+            </g>
+            <g transform="translate(66 66)" stroke="#0E0E0E" stroke-width="0.4" fill="none">
+              <rect x="0" y="0" width="28" height="28"/>
+              <line x1="14" y1="0" x2="14" y2="28"/>
+              <line x1="0" y1="14" x2="28" y2="14"/>
+              <rect x="12" y="12" width="3" height="3" fill="#E63312"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">PolicyMap</span><span class="score">58</span></div>
+      </div>
+
+      <!-- card 7 - VSRAI P2 -->
+      <div class="card">
+        <div class="top"><span>VSRAI · HEALTHCARE</span><span class="tier">P2</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g stroke="#0E0E0E" stroke-width="0.4" fill="none">
+              <polygon points="80,55 90,65 80,75 70,65" stroke-width="0.8"/>
+              <line x1="76" y1="75" x2="65" y2="145"/><line x1="84" y1="75" x2="95" y2="145"/>
+              <line x1="30" y1="147" x2="130" y2="147" stroke-width="1.2"/>
+            </g>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name">Findata Bridge</span><span class="score">54</span></div>
+      </div>
+
+      <!-- card 8 - MUTE (falsifier triggered) -->
+      <div class="card mute">
+        <div class="top"><span style="color:var(--mute)">FALSIFIER ❌</span><span class="tier">PASS</span></div>
+        <div class="canvas">
+          <svg viewBox="0 0 160 160" width="160">
+            <g transform="translate(80 80)" fill="none" stroke="#7A7A75" stroke-width="0.3">
+              <circle r="50"/><circle r="36"/>
+            </g>
+            <g transform="translate(66 66)" stroke="#7A7A75" stroke-width="0.3" fill="none">
+              <rect x="0" y="0" width="28" height="28"/>
+              <line x1="14" y1="0" x2="14" y2="28"/>
+              <line x1="0" y1="14" x2="28" y2="14"/>
+            </g>
+            <text x="80" y="155" font-family="JetBrains Mono" font-size="6" fill="#7A7A75" text-anchor="middle">WRAPPER / NO MOAT</text>
+          </svg>
+        </div>
+        <div class="bottom"><span class="name" style="color:var(--mute)">Eval-as-a-Service</span><span class="score">—</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-text"><b>Notes —</b> Cards are aspect-ratio 1 and sit on a single hairline grid. <b>No card shadows.</b> Hover lifts the company name to Fraunces semibold but doesn't move the canvas. Mute mode (<code>Falsifier Check = ❌ Triggered</code> or <code>Anti-thesis Filter = Auto-pass</code>) renders without the accent — the methodology is honest about no's. The footer of a mute card carries the <code>Pass Reason</code> in JetBrains Mono.</div>
+
+<!-- 03 PORTRAIT DETAIL -->
+<div class="section-head">
+  <span class="num">03</span>
+  <h2><em style="font-style:italic">/portraits/[slug]</em> — the canonical permalink</h2>
+  <span class="note">Default view · normal mode</span>
+</div>
+
+<div class="frame desktop">
+  <div class="urlbar">
+    <div class="dot3"><i></i><i></i><i></i></div>
+    <span class="url">portraits.anefi.vc/portraits/<b>lattice-dev</b></span>
+  </div>
+  <div class="viewport">
+    <div class="detail">
+      <div class="stage">
+        <div class="stage-meta">
+          <span><b>GAO</b> · FinServices · DORA · NL</span>
+          <span>Last signal: <b>4h ago</b> · Last verified: <b>17 May 2026</b></span>
+        </div>
+        <svg class="stage-portrait" viewBox="0 0 400 400">
+          <defs>
+            <filter id="grain2"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/><feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.04 0"/></filter>
+          </defs>
+          <g transform="translate(200 200)" fill="none" stroke="#0E0E0E" stroke-width="0.6">
+            <circle r="180"/><circle r="155"/><circle r="130"/><circle r="105"/><circle r="80"/>
+            <g font-family="JetBrains Mono" font-size="7" fill="#7A7A75">
+              <text x="180" y="-4">EU AI ACT · Annex III</text>
+              <text x="-180" y="160" text-anchor="end">DORA · Art 6</text>
+              <text x="155" y="155">NIS2</text>
+              <text x="-130" y="-10" text-anchor="end">CEN-CENELEC JTC 21</text>
+              <text x="-100" y="100" text-anchor="end">EU AI Office</text>
+            </g>
+          </g>
+          <g transform="translate(135 135)" stroke="#0E0E0E" stroke-width="0.7" fill="none">
+            <rect x="0" y="0" width="130" height="130"/>
+            <line x1="0" y1="18.5" x2="130" y2="18.5"/><line x1="0" y1="37" x2="130" y2="37"/><line x1="0" y1="55.5" x2="130" y2="55.5"/>
+            <line x1="0" y1="74" x2="130" y2="74"/><line x1="0" y1="92.5" x2="130" y2="92.5"/><line x1="0" y1="111" x2="130" y2="111"/>
+            <line x1="18.5" y1="0" x2="18.5" y2="130"/><line x1="37" y1="0" x2="37" y2="130"/><line x1="55.5" y1="0" x2="55.5" y2="130"/>
+            <line x1="74" y1="0" x2="74" y2="130"/><line x1="92.5" y1="0" x2="92.5" y2="130"/><line x1="111" y1="0" x2="111" y2="130"/>
+            <g fill="#E63312">
+              <rect x="35" y="35" width="4" height="4"/><rect x="72" y="35" width="4" height="4"/>
+              <rect x="35" y="72" width="4" height="4"/><rect x="91" y="91" width="4" height="4"/>
+              <rect x="109" y="54" width="4" height="4"/><rect x="54" y="109" width="4" height="4"/>
+              <rect x="91" y="35" width="4" height="4"/>
+            </g>
+          </g>
+          <g transform="translate(200 200)">
+            <polygon points="-14,0 0,-14 14,0 0,14" fill="none" stroke="#0E0E0E" stroke-width="1.2"/>
+            <polygon points="-7,0 0,-7 7,0 0,7" fill="#E63312"/>
+            <circle r="2" fill="#0E0E0E"/>
+          </g>
+          <g stroke="#0E0E0E" stroke-width="1" fill="none">
+            <line x1="20" y1="20" x2="36" y2="20"/><line x1="20" y1="20" x2="20" y2="36"/>
+            <line x1="380" y1="20" x2="364" y2="20"/><line x1="380" y1="20" x2="380" y2="36"/>
+            <line x1="20" y1="380" x2="36" y2="380"/><line x1="20" y1="380" x2="20" y2="364"/>
+            <line x1="380" y1="380" x2="364" y2="380"/><line x1="380" y1="380" x2="380" y2="364"/>
+          </g>
+          <rect x="0" y="0" width="400" height="400" filter="url(#grain2)"/>
+        </svg>
+        <div class="keys">
+          <span><kbd>X</kbd> X-ray</span>
+          <span><kbd>D</kbd> Dark</span>
+          <span><kbd>S</kbd> Share</span>
+          <span><kbd>?</kbd> Help</span>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="head">
+          <h1>Lattice.dev</h1>
+          <p class="one-liner">Runtime policy-to-execution mapping for agentic compliance workflows in DORA-regulated banks.</p>
+          <div class="ssi-row">
+            <span class="num">87</span>
+            <span class="tag">SSI v3.0 · GAO rubric</span>
+            <span class="tier">🔴 P0</span>
+          </div>
+        </div>
+        <div class="meta-grid">
+          <div><div class="k">HQ</div><div class="v">Amsterdam, NL</div></div>
+          <div><div class="k">Stage</div><div class="v">Seed</div></div>
+          <div><div class="k">Last raise</div><div class="v">€7.5M · Mar 2026</div></div>
+          <div><div class="k">Headcount</div><div class="v">14</div></div>
+          <div><div class="k">Founded</div><div class="v">2024</div></div>
+          <div><div class="k">Catalyst</div><div class="v">DORA · 0d</div></div>
+          <div><div class="k">Discovery</div><div class="v">procscan</div></div>
+          <div><div class="k">Confidence</div><div class="v">High</div></div>
+        </div>
+        <div class="signals">
+          <h4>Signal log · last 30 days · 6 marks</h4>
+          <div class="signal"><span class="dot"></span><span class="date">2026-05-19</span><span class="txt">TED award · Dutch central bank framework</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">2026-05-11</span><span class="txt">EU AI Office consultation submission</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">2026-05-04</span><span class="txt">ex-DNB head of model risk joined</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">2026-04-28</span><span class="txt">Public commit: HITL escalation API</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">2026-04-21</span><span class="txt">CEN-CENELEC JTC 21 contribution</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">2026-04-12</span><span class="txt">€7.5M seed · Mouro + EIC</span></div>
+        </div>
+        <div class="actions">
+          <a href="#">Notion memo →</a>
+          <a href="#" class="primary">Share permalink</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 04 PORTRAIT XRAY -->
+<div class="section-head">
+  <span class="num">04</span>
+  <h2>Same portrait, <em style="font-style:italic">x-ray</em> mode — press <span class="mono" style="color:var(--accent)">X</span></h2>
+  <span class="note">SSI v3.0 GAO rubric · 8 dimensions overlaid</span>
+</div>
+
+<div class="frame desktop">
+  <div class="urlbar">
+    <div class="dot3"><i></i><i></i><i></i></div>
+    <span class="url">portraits.anefi.vc/portraits/<b>lattice-dev</b> · X-ray on</span>
+  </div>
+  <div class="viewport">
+    <div class="detail">
+      <div class="stage xray-stage">
+        <div class="stage-meta">
+          <span><b>GAO</b> · X-ray mode</span>
+          <span>Methodology: <b>SSI v3.0</b></span>
+        </div>
+        <div style="width:80%;max-width:520px;aspect-ratio:1;position:relative">
+          <svg class="portrait-faded" viewBox="0 0 400 400" style="width:100%">
+            <g transform="translate(200 200)" fill="none" stroke="#0E0E0E" stroke-width="0.6">
+              <circle r="180"/><circle r="155"/><circle r="130"/><circle r="105"/>
+            </g>
+            <g transform="translate(135 135)" stroke="#0E0E0E" stroke-width="0.7" fill="none">
+              <rect x="0" y="0" width="130" height="130"/>
+            </g>
+          </svg>
+          <div class="xray-overlay">
+            <div class="dim"><div class="name">Regulatory Embeddedness</div><div class="score">18 / <b>20</b></div><div class="bar"><i style="width:90%"></i></div><div class="ev">AI Act sandbox · CEN-CENELEC JTC 21 · EU AI Office consultation</div></div>
+            <div class="dim"><div class="name">Runtime Governance Arch</div><div class="score">16 / <b>18</b></div><div class="bar"><i style="width:89%"></i></div><div class="ev">HITL escalation API · OpenTelemetry traces · policy-to-runtime</div></div>
+            <div class="dim"><div class="name">Reg-Technical Team Fit</div><div class="score">12 / <b>15</b></div><div class="bar"><i style="width:80%"></i></div><div class="ev">ex-DNB MR head · ex-DAZN platform · 2 ex-PwC compliance</div></div>
+            <div class="dim"><div class="name">Governance Build Velocity</div><div class="score">10 / <b>12</b></div><div class="bar"><i style="width:83%"></i></div><div class="ev">6 governance ships last 30d · changelog public</div></div>
+            <div class="dim"><div class="name">Enterprise Buyer Traction</div><div class="score">11 / <b>12</b></div><div class="bar"><i style="width:92%"></i></div><div class="ev">DNB framework · 2 EU systemic banks · named pilot</div></div>
+            <div class="dim"><div class="name">Technical Moat</div><div class="score">8 / <b>10</b></div><div class="bar"><i style="width:80%"></i></div><div class="ev">Model-agnostic · proprietary policy DSL · evidence graph</div></div>
+            <div class="dim"><div class="name">Capital Efficiency</div><div class="score">7 / <b>8</b></div><div class="bar"><i style="width:88%"></i></div><div class="ev">€7.5M raised · €1.2M ARR LOI · 14 FTE</div></div>
+            <div class="dim"><div class="name">Investor Signal Quality</div><div class="score">5 / <b>5</b></div><div class="bar"><i style="width:100%"></i></div><div class="ev">Mouro lead · EIC grant · DNB innovation hub</div></div>
+          </div>
+        </div>
+        <div class="keys">
+          <span><kbd>X</kbd> Dismiss x-ray</span>
+          <span><kbd>S</kbd> Share</span>
+        </div>
+      </div>
+      <div class="sidebar">
+        <div class="head">
+          <h1>Lattice.dev</h1>
+          <p class="one-liner">Each dimension's score sits on its corresponding visual element. <b style="color:var(--accent)">Hover to confirm.</b></p>
+          <div class="ssi-row">
+            <span class="num">87</span>
+            <span class="tag">Σ across 8 GAO dimensions</span>
+          </div>
+        </div>
+        <div class="meta-grid">
+          <div><div class="k">Tier</div><div class="v">🔴 Highest Conviction</div></div>
+          <div><div class="k">Priority</div><div class="v">P0 · 48h</div></div>
+          <div><div class="k">Stale flag</div><div class="v">— (Verified ≤90d)</div></div>
+          <div><div class="k">Falsifier</div><div class="v">✅ Clean</div></div>
+        </div>
+        <div class="signals">
+          <h4>Kill criteria check</h4>
+          <div class="signal"><span class="dot"></span><span class="date">RUNTIME?</span><span class="txt">Yes — policy enforcement at execution time</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">BUYER?</span><span class="txt">Yes — DNB framework + 2 banks · named</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">WRAPPER?</span><span class="txt">No — model-agnostic control plane</span></div>
+          <div class="signal"><span class="dot"></span><span class="date">DELAY-OK?</span><span class="txt">Yes — DORA already live · AI Act delay neutral</span></div>
+        </div>
+        <div class="actions">
+          <a href="#">Notion evidence note →</a>
+          <a href="#" class="primary">Schedule founder call</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="legend-text"><b>Notes —</b> The x-ray panel shows the SSI v3.0 GAO rubric (eight dimensions, 100-point total). When the company's <code>Thesis = Vertical SoR AI</code>, the panel renders the VSRAI rubric instead — different dimensions, different max scores. When <code>Thesis = Both</code>, both panels are stacked. Hovering a portrait element while in x-ray mode highlights the corresponding panel cell and vice versa.</div>
+
+<!-- 05 MOBILE -->
+<div class="section-head">
+  <span class="num">05</span>
+  <h2>Mobile — landing &amp; gallery</h2>
+  <span class="note">380px · iOS Safari</span>
+</div>
+
+<div class="mobiles">
+  <!-- Mobile landing -->
+  <div class="frame mobile">
+    <div class="status"><span>09:41</span><span>5G · 100%</span></div>
+    <div class="urlbar">
+      <div class="dot3"><i></i><i></i><i></i></div>
+      <span class="url">portraits.anefi.vc</span>
+    </div>
+    <div class="viewport">
+      <div class="m-hero">
+        <div class="kicker">Two-thesis canon · SSI v3.0</div>
+        <h1>One portrait per <em>thesis-fit</em> startup.</h1>
+        <p>Each artwork is the company's actual signal stack rendered as structure. No fixed hue. Structure switches with the thesis.</p>
+      </div>
+      <div class="m-portrait">
+        <svg viewBox="0 0 200 200" width="100%">
+          <g transform="translate(100 100)" fill="none" stroke="#0E0E0E" stroke-width="0.6">
+            <circle r="86"/><circle r="70"/><circle r="54"/><circle r="38"/>
+          </g>
+          <g transform="translate(72 72)" stroke="#0E0E0E" stroke-width="0.7" fill="none">
+            <rect x="0" y="0" width="56" height="56"/>
+            <line x1="18.6" y1="0" x2="18.6" y2="56"/><line x1="37.3" y1="0" x2="37.3" y2="56"/>
+            <line x1="0" y1="18.6" x2="56" y2="18.6"/><line x1="0" y1="37.3" x2="56" y2="37.3"/>
+            <rect x="15" y="15" width="3" height="3" fill="#E63312"/>
+            <rect x="34" y="34" width="3" height="3" fill="#E63312"/>
+          </g>
+          <polygon transform="translate(100 100)" points="-6,0 0,-6 6,0 0,6" fill="#E63312"/>
+        </svg>
+      </div>
+      <div class="m-foot">
+        <span class="name">Lattice.dev</span>
+        <span>GAO · <span class="score">SSI 87</span></span>
+      </div>
+      <div style="padding:14px 20px;border-top:1px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--mute);display:flex;justify-content:space-between">
+        <span>64 LIVE · 11 P0</span>
+        <span class="accent">DORA · 0d</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile gallery -->
+  <div class="frame mobile">
+    <div class="status"><span>09:41</span><span>5G · 100%</span></div>
+    <div class="urlbar">
+      <div class="dot3"><i></i><i></i><i></i></div>
+      <span class="url">portraits.anefi.vc<b>/gallery</b></span>
+    </div>
+    <div class="viewport">
+      <div style="padding:16px 20px 12px;border-bottom:1px solid var(--ink);font-family:'JetBrains Mono',monospace;font-size:10px">
+        <div style="color:var(--mute);margin-bottom:8px">FILTER</div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap">
+          <span class="chip" style="padding:3px 8px;border:1px solid var(--ink);background:var(--ink);color:var(--warm-white)">All</span>
+          <span class="chip" style="padding:3px 8px;border:1px solid var(--ink)">GAO</span>
+          <span class="chip" style="padding:3px 8px;border:1px solid var(--ink)">VSRAI</span>
+          <span class="chip" style="padding:3px 8px;border:1px solid var(--accent);color:var(--accent)">P0</span>
+          <span class="chip" style="padding:3px 8px;border:1px solid var(--ink)">P1</span>
+        </div>
+      </div>
+      <div class="m-gallery">
+        <div class="m-card">
+          <div class="top"><span>GAO · FS</span><span class="tier p0">P0</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g transform="translate(50 50)" fill="none" stroke="#0E0E0E" stroke-width="0.4"><circle r="42"/><circle r="32"/><circle r="22"/></g>
+              <g transform="translate(36 36)" stroke="#0E0E0E" stroke-width="0.4" fill="none"><rect x="0" y="0" width="28" height="28"/><line x1="14" y1="0" x2="14" y2="28"/><line x1="0" y1="14" x2="28" y2="14"/><rect x="12" y="12" width="2" height="2" fill="#E63312"/></g>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm">Lattice</span><span class="sc">87</span></div>
+        </div>
+        <div class="m-card">
+          <div class="top"><span>VSRAI · MED</span><span class="tier p0">P0</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g stroke="#0E0E0E" stroke-width="0.4" fill="none">
+                <polygon points="50,30 58,38 50,46 42,38" stroke-width="0.7"/>
+                <line x1="48" y1="46" x2="40" y2="90"/><line x1="52" y1="46" x2="60" y2="90"/><line x1="50" y1="46" x2="50" y2="90"/>
+                <line x1="14" y1="92" x2="86" y2="92" stroke-width="1"/>
+              </g>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm">Aevia</span><span class="sc">82</span></div>
+        </div>
+        <div class="m-card">
+          <div class="top"><span>GAO · SEC</span><span class="tier">P1</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g transform="translate(50 50)" fill="none" stroke="#0E0E0E" stroke-width="0.3"><circle r="36"/><circle r="26"/></g>
+              <g transform="translate(40 40)" stroke="#0E0E0E" stroke-width="0.3" fill="none"><rect x="0" y="0" width="20" height="20"/></g>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm">Quorum</span><span class="sc">71</span></div>
+        </div>
+        <div class="m-card">
+          <div class="top"><span>VSRAI · INS</span><span class="tier">P1</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g stroke="#0E0E0E" stroke-width="0.3" fill="none">
+                <polygon points="50,35 56,41 50,47 44,41" stroke-width="0.6"/>
+                <line x1="48" y1="47" x2="42" y2="88"/><line x1="52" y1="47" x2="58" y2="88"/>
+                <line x1="14" y1="90" x2="86" y2="90" stroke-width="1"/>
+              </g>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm">Sigma</span><span class="sc">68</span></div>
+        </div>
+        <div class="m-card">
+          <div class="top"><span>BOTH · LEG</span><span class="tier">P1</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g fill="none" stroke="#0E0E0E" stroke-width="0.3">
+                <rect x="36" y="18" width="28" height="18"/><line x1="50" y1="18" x2="50" y2="36"/><rect x="46" y="24" width="2" height="2" fill="#E63312"/>
+                <line x1="44" y1="50" x2="38" y2="90"/><line x1="56" y1="50" x2="62" y2="90"/>
+                <line x1="14" y1="90" x2="86" y2="90" stroke-width="1"/>
+              </g>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm">Auditline</span><span class="sc">66</span></div>
+        </div>
+        <div class="m-card mute" style="opacity:.55">
+          <div class="top"><span style="color:var(--mute)">FALSIFIER ❌</span><span class="tier">PASS</span></div>
+          <div class="canvas">
+            <svg viewBox="0 0 100 100" width="100">
+              <g transform="translate(50 50)" fill="none" stroke="#7A7A75" stroke-width="0.3"><circle r="30"/><circle r="20"/></g>
+              <text x="50" y="92" font-family="JetBrains Mono" font-size="5" fill="#7A7A75" text-anchor="middle">WRAPPER</text>
+            </svg>
+          </div>
+          <div class="bottom"><span class="nm" style="color:var(--mute)">EaaS Co</span><span class="sc" style="color:var(--mute)">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footnotes">
+  <div class="col">
+    <h5>Typography</h5>
+    <p><b>Display</b> · Fraunces variable, opsz 144, weight 400–500, italic for marks. <b>UI</b> · DM Sans variable. <b>Data</b> · JetBrains Mono, tabular numerals. Self-hosted via <code>next/font</code>.</p>
+  </div>
+  <div class="col">
+    <h5>Color discipline</h5>
+    <p>Warm-white <code>#FAFAF7</code> · Ink <code>#0E0E0E</code> · Vermillion <code>#E63312</code> as the only accent — applied on the SSI score, active filter, hover state. No purple gradients. No glassmorphism. Grain layer at 4% opacity.</p>
+  </div>
+  <div class="col">
+    <h5>Determinism</h5>
+    <p>Each portrait's seed = <code>sha256(slug + thesis + ssi)</code>. Same inputs → same render. A new Signal in Notion shifts the score, which moves the visible structure. The portrait is the methodology made visible.</p>
+  </div>
+</div>
+
+</body>
+</html>

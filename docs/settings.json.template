@@ -1,0 +1,38 @@
+// Drop into .claude/settings.json to enable:
+//  - PostToolUse: pnpm lint --fix + pnpm typecheck after every Edit/Write
+//  - PreToolUse: Bash secret-leak guard
+//  - SubagentStop: voice-checker audit log
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "cd /Users/astelvida/projects/signal-portraits && [ -f package.json ] && pnpm lint --fix --silent 2>/dev/null || true" }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          { "type": "command", "command": "cd /Users/astelvida/projects/signal-portraits && [ -f tsconfig.json ] && pnpm typecheck 2>&1 | tail -50 || true" }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          { "type": "command", "command": "/Users/astelvida/projects/signal-portraits/scripts/block-secret-leak.sh" }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "matcher": "voice-checker",
+        "hooks": [
+          { "type": "command", "command": "echo \"$(date -u +%FT%TZ) voice-checker stop\" >> /Users/astelvida/projects/signal-portraits/.claude/voice-audit.log" }
+        ]
+      }
+    ]
+  }
+}
