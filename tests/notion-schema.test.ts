@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   CompanySchema,
   isMuted,
+  isStale,
   slugify,
   type Company,
 } from "@/lib/notion/schema";
@@ -91,5 +92,24 @@ describe("CompanySchema", () => {
     expect(slugify("Acme Governance")).toBe("acme-governance");
     expect(slugify("Çırağan / The Bank.AI")).toBe("ciragan-the-bank-ai");
     expect(slugify("  Trailing  Space  ")).toBe("trailing-space");
+  });
+});
+
+describe("isStale", () => {
+  const now = new Date("2026-05-19T00:00:00Z");
+
+  it("null lastVerified is not stale (we never claimed to have checked)", () => {
+    const co = CompanySchema.parse({ ...baseFixture, lastVerified: null });
+    expect(isStale(co, now)).toBe(false);
+  });
+
+  it("verified 30 days ago is not stale", () => {
+    const co = CompanySchema.parse({ ...baseFixture, lastVerified: "2026-04-19" });
+    expect(isStale(co, now)).toBe(false);
+  });
+
+  it("verified 100 days ago is stale", () => {
+    const co = CompanySchema.parse({ ...baseFixture, lastVerified: "2026-02-08" });
+    expect(isStale(co, now)).toBe(true);
   });
 });

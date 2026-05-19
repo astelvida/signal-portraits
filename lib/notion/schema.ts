@@ -139,11 +139,12 @@ export function isMuted(co: Company): boolean {
   );
 }
 
-// Stale flag: Last verified > 90 days ago. Renders a stale-glyph micro-mark on the portrait.
+// Stale flag: explicitly verified more than 90 days ago. Absent verification → not stale
+// (we never claimed to have checked). Renders a stale-glyph micro-mark on the portrait.
 // Caller MUST pass `now` explicitly. Next 16 Cache Components disallows `new Date()` defaults
 // in server components without first awaiting an uncached data source.
 export function isStale(co: Company, now: Date): boolean {
-  if (!co.lastVerified) return true;
+  if (!co.lastVerified) return false;
   const verified = new Date(co.lastVerified);
   const ageMs = now.getTime() - verified.getTime();
   return ageMs > 90 * 24 * 60 * 60 * 1000;
