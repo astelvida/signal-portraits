@@ -66,3 +66,44 @@
   border-color: var(--color-rule);
   border-width: 2px;
 }
+
+/* Responsive collapse for landing hero, two-thesis blocks, gallery grid, and detail layout.
+   At ≤640px everything stacks vertically into a single column.
+   Selectors match React's no-space inline-style serialisation: "grid-template-columns:1.2fr 1fr". */
+@media (max-width: 640px) {
+  body section[style*="1.2fr 1fr"],
+  body section[style*="1fr 1fr"],
+  body section[style*="2fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+  body section[style*="1.2fr 1fr"] > div:first-child,
+  body section[style*="1.2fr 1fr"] > article:first-child,
+  body section[style*="1fr 1fr"] > div:first-child,
+  body section[style*="1fr 1fr"] > article:first-child,
+  body section[style*="2fr 1fr"] > div:first-child,
+  body section[style*="2fr 1fr"] > article:first-child {
+    border-right: none !important;
+    border-bottom: 1px solid var(--color-ink) !important;
+  }
+  body div[style*="repeat(4"] {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+  body h1.display,
+  body h1[class*="display"] {
+    font-size: 40px !important;
+  }
+  body h2.display,
+  body h2[class*="display"] {
+    font-size: 26px !important;
+  }
+  body > div > header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 400px) {
+  body div[style*="repeat(4"] {
+    grid-template-columns: 1fr !important;
+  }
+}
