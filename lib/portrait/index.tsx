@@ -1,6 +1,8 @@
 import type { Company } from "@/lib/notion/schema";
 import { isMuted } from "@/lib/notion/schema";
 import { GAO } from "./gao";
+import { VSRAI } from "./vsrai";
+import { Both } from "./both";
 import { TOKENS, FONTS } from "./tokens";
 
 /**
@@ -30,10 +32,9 @@ export function Portrait({
       case "Governed Agentic Ops":
         return <GAO company={company} options={{ size, muted, showLabels }} />;
       case "Vertical SoR AI":
-        // VSRAI grammar lands in Task 6. Placeholder routes to GAO until it ships.
-        return <GAO company={company} options={{ size, muted, showLabels }} />;
+        return <VSRAI company={company} options={{ size, muted, showLabels }} />;
       case "Both":
-        return <GAO company={company} options={{ size, muted, showLabels }} />;
+        return <Both company={company} options={{ size, muted, showLabels }} />;
     }
   })();
 
