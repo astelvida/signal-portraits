@@ -1,0 +1,103 @@
+import Link from "next/link";
+import type { Company } from "@/lib/notion/schema";
+import { isMuted, isStale } from "@/lib/notion/schema";
+import { Portrait } from "@/lib/portrait";
+
+const thesisShort: Record<string, string> = {
+  "Governed Agentic Ops": "GAO",
+  "Vertical SoR AI": "VSRAI",
+  Both: "BOTH",
+};
+
+export function PortraitCard({ company, now }: { company: Company; now: Date }) {
+  const muted = isMuted(company);
+  const stale = isStale(company, now);
+
+  return (
+    <Link
+      href={`/portraits/${company.slug}`}
+      style={{
+        borderRight: "1px solid var(--color-ink)",
+        borderBottom: "1px solid var(--color-ink)",
+        padding: 24,
+        display: "flex",
+        flexDirection: "column",
+        gap: 16,
+        background: "var(--color-warm-white)",
+        position: "relative",
+        aspectRatio: "1 / 1",
+        textDecoration: "none",
+        color: "var(--color-ink)",
+        opacity: muted ? 0.62 : 1,
+      }}
+    >
+      <div
+        className="mono"
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          fontSize: 10,
+          color: "var(--color-mute)",
+          letterSpacing: "0.04em",
+          textTransform: "uppercase",
+        }}
+      >
+        <span>
+          {thesisShort[company.thesis] ?? "—"} · {company.sector}
+        </span>
+        <span
+          style={{
+            color:
+              company.priority === "P0" && !muted
+                ? "var(--color-accent)"
+                : "var(--color-ink)",
+            fontWeight: 600,
+          }}
+        >
+          {company.priority}
+        </span>
+      </div>
+
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          minHeight: 0,
+        }}
+      >
+        <Portrait company={company} size={220} showLabels={false} stale={stale} />
+      </div>
+
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "baseline",
+        }}
+      >
+        <span
+          className="display"
+          style={{
+            fontStyle: "italic",
+            fontSize: 18,
+            lineHeight: 1.1,
+          }}
+        >
+          {company.company}
+        </span>
+        <span
+          className="mono"
+          style={{
+            fontSize: 13,
+            fontWeight: 600,
+            color: muted ? "var(--color-mute)" : "var(--color-accent)",
+          }}
+        >
+          SSI {company.ssiScore}
+        </span>
+      </div>
+    </Link>
+  );
+}

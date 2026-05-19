@@ -6,6 +6,7 @@ import {
   queryDataSource,
 } from "./client";
 import { mapCompany, mapSignal } from "./mappers";
+import { FIXTURE_COMPANIES } from "./fixtures";
 import type { Company, Signal } from "./schema";
 
 // ---------- All companies (cached, tagged "companies") ----------
@@ -14,6 +15,11 @@ export async function fetchCompanies(): Promise<Company[]> {
   "use cache";
   cacheTag("companies");
   cacheLife({ revalidate: 3600, stale: 60, expire: 86400 });
+
+  // Dev fallback: return fixtures when NOTION_TOKEN is missing.
+  if (!process.env.NOTION_TOKEN) {
+    return FIXTURE_COMPANIES;
+  }
 
   const all: Company[] = [];
   let cursor: string | undefined = undefined;
@@ -50,6 +56,8 @@ export async function fetchSignalsFor(companyId: string): Promise<Signal[]> {
   "use cache";
   cacheTag(`signals:${companyId}`);
   cacheLife({ revalidate: 1800 });
+
+  if (!process.env.NOTION_TOKEN) return [];
 
   const page = await queryDataSource(SIGNALS_DATA_SOURCE_ID, {
     pageSize: 100,
