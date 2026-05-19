@@ -11,17 +11,27 @@ import type { Company, Signal } from "./schema";
 
 // ---------- All companies (cached, tagged "companies") ----------
 
-export async function fetchCompanies(): Promise<Company[]> {
+/**
+ * Shared internal walk over the Companies data source. Returns both the
+ * tagged companies and the count of rows omitted for having no Thesis tag.
+ * Cached under the "companies" tag so `fetchCompanies` and
+ * `fetchCompaniesSummary` share a single Notion round-trip.
+ */
+async function fetchCompaniesData(): Promise<{
+  companies: Company[];
+  untagged: number;
+}> {
   "use cache";
   cacheTag("companies");
   cacheLife({ revalidate: 3600, stale: 60, expire: 86400 });
 
   // Dev fallback: return fixtures when NOTION_TOKEN is missing.
   if (!process.env.NOTION_TOKEN) {
-    return FIXTURE_COMPANIES;
+    return { companies: FIXTURE_COMPANIES, untagged: 0 };
   }
 
   const all: Company[] = [];
+  let untagged = 0;
   let cursor: string | undefined = undefined;
   do {
     const page = await queryDataSource(COMPANIES_DATA_SOURCE_ID, {
@@ -30,7 +40,12 @@ export async function fetchCompanies(): Promise<Company[]> {
     });
     for (const row of page.results) {
       try {
-        all.push(mapCompany(row));
+        const co = mapCompany(row);
+        if (co === null) {
+          untagged++;
+          continue;
+        }
+        all.push(co);
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
         console.warn(`[notion] failed to parse company ${row.id}: ${msg.slice(0, 300)}`);
@@ -39,7 +54,12 @@ export async function fetchCompanies(): Promise<Company[]> {
     cursor = page.next_cursor ?? undefined;
   } while (cursor);
 
-  return all;
+  return { companies: all, untagged };
+}
+
+export async function fetchCompanies(): Promise<Company[]> {
+  const { companies } = await fetchCompaniesData();
+  return companies;
 }
 
 export async function fetchCompany(slug: string): Promise<Company | null> {
@@ -77,6 +97,7 @@ export interface CompaniesSummary {
   vsrai: number;
   both: number;
   p0: number;
+  untagged: number;
   freshestSignalAgeHours: number | null;
 }
 
@@ -85,7 +106,7 @@ export async function fetchCompaniesSummary(): Promise<CompaniesSummary> {
   cacheTag("companies");
   cacheLife({ revalidate: 3600 });
 
-  const all = await fetchCompanies();
+  const { companies: all, untagged } = await fetchCompaniesData();
   const total = all.length;
   const gao = all.filter((c) => c.thesis === "Governed Agentic Ops").length;
   const vsrai = all.filter((c) => c.thesis === "Vertical SoR AI").length;
@@ -103,7 +124,7 @@ export async function fetchCompaniesSummary(): Promise<CompaniesSummary> {
       ? Math.max(0, Math.round((Date.now() - freshestSignal) / 3_600_000))
       : null;
 
-  return { total, gao, vsrai, both, p0, freshestSignalAgeHours };
+  return { total, gao, vsrai, both, p0, untagged, freshestSignalAgeHours };
 }
 
 // ---------- Featured company ----------

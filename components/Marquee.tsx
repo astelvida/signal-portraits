@@ -1,15 +1,16 @@
 import { fetchCompaniesSummary } from "@/lib/notion/companies";
 
-function formatFreshness(hours: number | null): string {
-  if (hours == null) return "—";
-  if (hours < 24) return `${hours}h ago`;
-  return `${Math.round(hours / 24)}d ago`;
+/** Compact "Xh / Xd / Xw" suffix. Caller appends "ago". */
+function formatAge(hours: number): string {
+  if (hours < 24) return `${hours}h`;
+  const days = Math.round(hours / 24);
+  if (days < 30) return `${days}d`;
+  const weeks = Math.round(days / 7);
+  return `${weeks}w`;
 }
 
 export async function Marquee() {
   const s = await fetchCompaniesSummary();
-  const freshness = s.freshestSignalAgeHours;
-  const freshnessText = formatFreshness(freshness);
 
   return (
     <div
@@ -36,9 +37,19 @@ export async function Marquee() {
       <span>
         <b style={{ color: "var(--color-ink)" }}>{s.p0}</b> P0
       </span>
-      <span>
-        Last signal landed <b style={{ color: "var(--color-ink)" }}>{freshnessText}</b>
-      </span>
+      {s.untagged > 0 ? (
+        <span>
+          <b style={{ color: "var(--color-ink)" }}>{s.untagged}</b> untagged in Notion
+        </span>
+      ) : null}
+      {s.freshestSignalAgeHours !== null ? (
+        <span>
+          Last signal landed{" "}
+          <b style={{ color: "var(--color-ink)" }}>
+            {formatAge(s.freshestSignalAgeHours)} ago
+          </b>
+        </span>
+      ) : null}
     </div>
   );
 }

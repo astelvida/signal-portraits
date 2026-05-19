@@ -90,10 +90,16 @@ function readRelation(prop: NotionProp | undefined): string[] {
   return r.map((x) => x.id);
 }
 
+/**
+ * Map a Notion company row to our typed Company shape, or return `null`
+ * when the row has no Thesis tag. Callers (fetchCompanies) filter nulls
+ * out of the gallery and surface the count separately. Padding the gallery
+ * with mis-tagged GAO would misrepresent coverage.
+ */
 export function mapCompany(raw: {
   id: string;
   properties: Record<string, unknown>;
-}): Company {
+}): Company | null {
   const p = raw.properties as Record<string, NotionProp>;
   const name = readString(p["Company"]);
   const slug = slugify(name);
@@ -101,13 +107,12 @@ export function mapCompany(raw: {
   const relCatalyst = readRelation(p["Primary Catalyst"]);
   const relMM = readRelation(p["Market Map Sub-Segment"]);
 
-  // Thesis is multi_select in the live DB. If a company is tagged with both
-  // theses, we surface it as "Both". Otherwise take the single tag, or
-  // default to GAO if untagged.
+  // Thesis is multi_select in the live DB. Two tags → "Both". One tag →
+  // that tag. Zero tags → return null so the caller can omit the row.
   const thesisTags = readMultiSelect(p["Thesis"]);
-  let thesisValue = "Governed Agentic Ops";
+  if (thesisTags.length === 0) return null;
+  let thesisValue = thesisTags[0]!;
   if (thesisTags.length >= 2) thesisValue = "Both";
-  else if (thesisTags.length === 1) thesisValue = thesisTags[0]!;
 
   // SSI Score falls back to Adjusted SSI then Seed SSI if the primary is null.
   const ssi =
