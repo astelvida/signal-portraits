@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@notionhq/client':
+        specifier: ^5.21.0
+        version: 5.21.0
       '@vercel/og':
         specifier: ^0.11.1
         version: 0.11.1
@@ -629,6 +632,10 @@ packages:
   '@nolyfill/is-core-module@1.0.39':
     resolution: {integrity: sha512-nn5ozdjYQpUCZlWGuxcJY/KpxkWQs4DcbMCmKojjyrYDEAGy4Ce19NN4v5MduafTwJlbKc99UA8YhSVqq9yPZA==}
     engines: {node: '>=12.4.0'}
+
+  '@notionhq/client@5.21.0':
+    resolution: {integrity: sha512-X+T+hzaQFleOUGm4xUOUm51pOpdZ1+6T4BsRjGlcdEOTJLNkUEv8nZATq9O3ZY4NQEgICc0qwQ0I25OdYprX0w==}
+    engines: {node: '>=18'}
 
   '@oxc-project/types@0.130.0':
     resolution: {integrity: sha512-ibD2usx9JRu7f5pu2tMKMI4cpA4NgXJQoYRP4pQ7Pxmn1l6k/53qWtQWZayhYy3X4QZkt90Ot+mJEaeXouio6Q==}
@@ -3043,6 +3050,8 @@ snapshots:
       fastq: 1.20.1
 
   '@nolyfill/is-core-module@1.0.39': {}
+
+  '@notionhq/client@5.21.0': {}
 
   '@oxc-project/types@0.130.0': {}
 
