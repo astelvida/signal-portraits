@@ -19,7 +19,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
       style={{
         borderRight: "1px solid var(--color-ink)",
         borderBottom: "1px solid var(--color-ink)",
-        padding: 24,
+        padding: "20px 24px",
         display: "flex",
         flexDirection: "column",
         gap: 16,
@@ -29,6 +29,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
         textDecoration: "none",
         color: "var(--color-ink)",
         opacity: muted ? 0.62 : 1,
+        overflow: "hidden",
       }}
     >
       <div
@@ -73,8 +74,10 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
       <div
         style={{
           display: "flex",
+          gap: 12,
           justifyContent: "space-between",
           alignItems: "baseline",
+          minWidth: 0,
         }}
       >
         <span
@@ -83,7 +86,13 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
             fontStyle: "italic",
             fontSize: 18,
             lineHeight: 1.1,
+            flex: 1,
+            minWidth: 0,
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
           }}
+          title={company.company}
         >
           {company.company}
         </span>
@@ -93,6 +102,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
             fontSize: 13,
             fontWeight: 600,
             color: muted ? "var(--color-mute)" : "var(--color-accent)",
+            flexShrink: 0,
           }}
         >
           SSI {company.ssiScore}
