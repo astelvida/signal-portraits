@@ -66,9 +66,10 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
           alignItems: "center",
           justifyContent: "center",
           minHeight: 0,
+          overflow: "hidden",
         }}
       >
-        <Portrait company={company} size={220} showLabels={false} stale={stale} />
+        <Portrait company={company} size={180} showLabels={false} stale={stale} />
       </div>
 
       <div

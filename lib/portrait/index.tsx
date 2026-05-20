@@ -38,12 +38,16 @@ export function Portrait({
     }
   })();
 
+  // Fixed pixel size to prevent the SVG from overflowing card containers and
+  // bleeding under the bottom strap. Caller controls the box; the portrait
+  // never tries to grow beyond `size`.
   return (
     <div
       style={{
         position: "relative",
-        width: "100%",
-        aspectRatio: "1 / 1",
+        width: size,
+        height: size,
+        maxWidth: "100%",
         background: TOKENS.WARM_WHITE,
       }}
     >
