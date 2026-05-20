@@ -18,17 +18,21 @@ const SECTORS = [
 ] as const;
 
 export function GalleryToolbar({ total }: { total: number }) {
+  // shallow:false makes each chip click trigger a server re-fetch so the
+  // grid actually filters. scroll:false keeps the grid in view. history:push
+  // lets the back button walk through filter combos.
+  const nuqsOpts = { shallow: false, history: "push" as const, scroll: false };
   const [thesis, setThesis] = useQueryState(
     "thesis",
-    parseAsStringEnum([...THESIS]).withDefault("all"),
+    parseAsStringEnum([...THESIS]).withDefault("all").withOptions(nuqsOpts),
   );
   const [tiers, setTiers] = useQueryState(
     "tier",
-    parseAsArrayOf(parseAsString).withDefault([]),
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions(nuqsOpts),
   );
   const [sectors, setSectors] = useQueryState(
     "sector",
-    parseAsArrayOf(parseAsString).withDefault([]),
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions(nuqsOpts),
   );
 
   const toggleTier = (t: string) =>
