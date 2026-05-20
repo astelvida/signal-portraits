@@ -6,7 +6,7 @@
 
 ## 0 · How you should run this build (read this first)
 
-You are building **Signal Portraits** — a Next.js 15 generative-art gallery deployed at `portraits.anefi.vc`. The full PRD is in `./PRD.md` and the wireframes are in `./WIREFRAMES.html`. Read both before doing anything else.
+You are building **Signal Portraits** — a Next.js 15 generative-art gallery deployed at `signal-portraits.vercel.app`. The full PRD is in `./PRD.md` and the wireframes are in `./WIREFRAMES.html`. Read both before doing anything else.
 
 Use the modern Claude Code stack — not the API. Concretely:
 
@@ -232,7 +232,7 @@ This is the load-bearing step. The whole project's signal-to-noise lives here. T
 - [ ] `get_access_to_vercel_url` for a protected URL.
 - [ ] Drive Chrome MCP to screenshot the four pages at 1280px, 1024px, 768px, 380px. Save under `./qa/screenshots/`.
 - [ ] Diff against `./WIREFRAMES.html` visually. Note any deviation, justify or fix.
-- [ ] When approved, configure `portraits.anefi.vc` as the production domain. Output the CNAME record needed.
+- [ ] When approved, configure `signal-portraits.vercel.app` as the production domain. Output the CNAME record needed.
 
 **Stop signal:** preview URL approved, production domain CNAME documented.
 

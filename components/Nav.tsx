@@ -42,18 +42,6 @@ export function Nav() {
           </Link>
         );
       })}
-      <a
-        href="https://anefi.vc"
-        target="_blank"
-        rel="noreferrer noopener"
-        style={{
-          color: "var(--color-mute)",
-          fontWeight: 500,
-          textDecoration: "none",
-        }}
-      >
-        anefi.vc <span aria-hidden>↗</span>
-      </a>
     </nav>
   );
 }

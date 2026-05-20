@@ -5,12 +5,12 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://portraits.anefi.vc"
+    process.env.NEXT_PUBLIC_SITE_URL ?? "https://signal-portraits.vercel.app"
   ),
   title: "Signal Portraits",
   description:
     "One portrait per European AI thesis-fit startup.",
-  authors: [{ name: "Sevda Anefi", url: "https://anefi.vc" }],
+  authors: [{ name: "Sevda Anefi" }],
   creator: "Sevda Anefi",
   openGraph: {
     type: "website",

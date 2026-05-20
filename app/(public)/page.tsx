@@ -158,13 +158,7 @@ export default function Landing() {
               color: "var(--color-mute)",
             }}
           >
-            <b style={{ color: "var(--color-ink)", fontWeight: 500 }}>Sevda Anefi</b> ·{" "}
-            <a
-              href="https://anefi.vc"
-              style={{ color: "var(--color-accent)", textDecoration: "underline", textUnderlineOffset: "0.2em" }}
-            >
-              anefi.vc
-            </a>
+            <b style={{ color: "var(--color-ink)", fontWeight: 500 }}>Sevda Anefi</b>
             <br />
             <Link
               href="/gallery"

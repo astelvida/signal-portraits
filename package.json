@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "portraits.anefi.vc. One portrait per European AI thesis-fit startup.",
+  "description": "signal-portraits.vercel.app. One portrait per European AI thesis-fit startup.",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

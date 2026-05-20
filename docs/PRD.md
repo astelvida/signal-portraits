@@ -4,7 +4,7 @@
 **Version:** 1.0
 **Status:** 🟩 Draft for build
 **Last verified:** 19 May 2026
-**Surface:** portraits.anefi.vc
+**Surface:** signal-portraits.vercel.app
 **Source of truth:** Notion Scouting Engine v5.0 · Investment Thesis Pack v2.0 · SSI v3.0
 
 ---
@@ -32,7 +32,7 @@ Signal Portraits is the public-surface proof that the methodology is real. Each 
 | Partner-meeting opens (UTM-tracked) | 3 from outreach | 8 from outreach |
 | Median time-to-portrait after new Companies row created | 24h via Notion webhook | < 1h via Notion webhook |
 | Portrait shares (X + LinkedIn) | 50 | 200 |
-| Anefi.vc referrer traffic | 8% of portraits.anefi.vc visits | 15% |
+| Anefi.vc referrer traffic | 8% of signal-portraits.vercel.app visits | 15% |
 
 ## 4 · Non-goals (explicit)
 
@@ -56,7 +56,7 @@ Signal Portraits is the public-surface proof that the methodology is real. Each 
 ## 6 · Information architecture
 
 ```
-portraits.anefi.vc
+signal-portraits.vercel.app
 ├── /                       Landing — manifesto opener + featured P0 portrait + gallery teaser
 ├── /gallery                Filterable grid (thesis · sector · tier · catalyst)
 ├── /portraits/[slug]       Single portrait, x-ray toggle, share controls, signal log
@@ -184,7 +184,7 @@ No mouse-following effects, no parallax. The brand is editorial, not playful.
 | OG images | **`@vercel/og`** (Satori) at the edge | One image per portrait, regenerated on Notion webhook. |
 | Data | **Notion MCP** server via the official `notion://` connector inside an Agent SDK route | At build time + on webhook, the engine fetches the Companies data source by ID. |
 | Cache | **Next.js Data Cache + ISR**, 1h tag-revalidated by `/api/revalidate` | Webhook fires from Notion → revalidates company tag. |
-| Hosting | **Vercel**, deployed via the Vercel MCP server | Domain `portraits.anefi.vc` (CNAME from the apex). |
+| Hosting | **Vercel**, deployed via the Vercel MCP server | Domain `signal-portraits.vercel.app` (CNAME from the apex). |
 | Observability | Vercel Analytics + a `og.json` page per portrait for debugging | No third-party tracking. |
 | Storage | Local-only — no DB | Notion is the system of record. |
 
@@ -205,7 +205,7 @@ The brief asked for style, not colors. The full house style is loaded by reading
 
 **Phase 0 — Spike (≤ 2 days).** One portrait, one company, one thesis. Static seed, no Notion. Validate the visual grammar lands. Show to a partner who's seen the brand. Adjust.
 
-**Phase 1 — Public alpha (1 week).** Both visual languages working. Notion MCP pulling live data. Gallery with thesis/sector/tier filters. OG images. portraits.anefi.vc DNS live. Mute mode shipped. 30+ portraits.
+**Phase 1 — Public alpha (1 week).** Both visual languages working. Notion MCP pulling live data. Gallery with thesis/sector/tier filters. OG images. signal-portraits.vercel.app DNS live. Mute mode shipped. 30+ portraits.
 
 **Phase 2 — Operational (2–3 weeks after Phase 1).** Notion webhook → automatic revalidation. Per-dimension SSI scores once the Companies DB migration ships. Time-lapse view per portrait (a portrait's history as new signals landed). Inbound founder form. Substack cross-link on each portrait.
 

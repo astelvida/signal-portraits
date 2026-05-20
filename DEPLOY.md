@@ -16,7 +16,7 @@ NOTION_TOKEN=secret_xxx
 # subscription. See the Webhook section in README.md for the flow.
 NOTION_WEBHOOK_SECRET=...
 
-NEXT_PUBLIC_SITE_URL=https://portraits.anefi.vc
+NEXT_PUBLIC_SITE_URL=https://signal-portraits.vercel.app
 ```
 
 Until `NOTION_TOKEN` is set, the app renders 10 representative fixture companies (see `lib/notion/fixtures.ts`). The moment the token lands, live Notion data takes over.
@@ -36,22 +36,18 @@ When prompted, accept defaults except project name (`signal-portraits`).
 
 ## 3. Domain
 
-After the first prod deploy:
+Production runs on the Vercel-assigned URL: `https://signal-portraits.vercel.app`.
+No DNS work is required.
+
+**Optional — custom domain.** To serve from a custom domain later:
 
 ```bash
-pnpm dlx vercel domains add portraits.anefi.vc signal-portraits
+pnpm dlx vercel domains add <your-domain> signal-portraits
 ```
 
-Then add a **CNAME** record at your DNS provider:
-
-```
-host:    portraits
-type:    CNAME
-target:  cname.vercel-dns.com
-ttl:     auto
-```
-
-Wait for SSL provisioning (usually under 5 minutes).
+Add the **CNAME** record Vercel prints at your DNS provider (target
+`cname.vercel-dns.com`), then update `NEXT_PUBLIC_SITE_URL` to match and
+redeploy. SSL provisioning usually completes within 5 minutes.
 
 ## 4. Wire the Notion webhook
 
@@ -86,8 +82,8 @@ pnpm test                             # expect: 18/18 green
 pnpm build                            # expect: clean
 
 # Generate the three OG variants and eyeball them
-curl -o /tmp/og-p0.png  https://portraits.anefi.vc/api/og/<some-p0-slug>
-curl -o /tmp/og-mute.png https://portraits.anefi.vc/api/og/<some-mute-slug>
+curl -o /tmp/og-p0.png  https://signal-portraits.vercel.app/api/og/<some-p0-slug>
+curl -o /tmp/og-mute.png https://signal-portraits.vercel.app/api/og/<some-mute-slug>
 ```
 
 ## 6. Optional — install Claude Code hooks

@@ -46,7 +46,7 @@ export async function GET(
             Signal Portraits<span style={{ color: accent }}>.</span>
           </div>
           <div style={{ display: "flex", flexDirection: "column", fontSize: 14, color: mute, textAlign: "right", fontFamily: "ui-monospace, monospace" }}>
-            <span>portraits.anefi.vc</span>
+            <span>signal-portraits.vercel.app</span>
             <span style={{ color: ink }}>{metaRight}</span>
           </div>
         </div>

@@ -48,6 +48,6 @@ Deviations from wireframes (justified):
 ## Open before production
 
 1. Set `NOTION_TOKEN` in Vercel project env (replaces fixture fallback).
-2. Set `NOTION_WEBHOOK_SECRET` and wire `https://portraits.anefi.vc/api/revalidate` in Notion data source webhooks.
-3. Configure `portraits.anefi.vc` CNAME → `cname.vercel-dns.com`.
+2. Set `NOTION_WEBHOOK_SECRET` and wire `https://signal-portraits.vercel.app/api/revalidate` in Notion data source webhooks.
+3. (Optional) Attach a custom domain in Vercel and update `NEXT_PUBLIC_SITE_URL`.
 4. Drop `docs/settings.json.template` into `.claude/settings.json` if the user wants lint/typecheck/secret-leak hooks.

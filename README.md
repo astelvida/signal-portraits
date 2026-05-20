@@ -1,8 +1,10 @@
 # Signal Portraits
 
-[portraits.anefi.vc](https://portraits.anefi.vc) — one portrait per European AI thesis-fit startup.
+[signal-portraits.vercel.app](https://signal-portraits.vercel.app) — one portrait per European AI thesis-fit startup.
 
 A public Next.js 16 gallery where each company in the Notion Scouting Engine renders as a deterministic generative artwork derived from its actual SSI v3.0 signals. Two distinct visual grammars (GAO + VSRAI) that never collapse into one.
+
+Phase 1 is build-complete. Working in this repo with an AI agent? Read [`CLAUDE.md`](./CLAUDE.md) for conventions and guardrails.
 
 ## Stack
 

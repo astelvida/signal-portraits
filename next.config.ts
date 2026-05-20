@@ -7,7 +7,7 @@ const config: NextConfig = {
   images: {
     formats: ["image/avif", "image/webp"],
   },
-  // Sevda Anefi · portraits.anefi.vc · Signals over stories.
+  // Sevda Anefi · signal-portraits.vercel.app · Signals over stories.
 };
 
 export default config;

@@ -38,7 +38,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
               lineHeight: 1.4,
             }}
           >
-            <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>portraits.anefi.vc</b>
+            <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>signal-portraits.vercel.app</b>
             {" · Sevda Anefi"}
           </div>
         </div>
@@ -59,14 +59,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
         }}
       >
         <span>Filings beat vibes. Signals beat stories. Buyers beat hype.</span>
-        <span>
-          <a
-            href="https://anefi.vc"
-            style={{ color: "var(--color-accent)", textDecoration: "underline", textUnderlineOffset: "0.2em" }}
-          >
-            anefi.vc
-          </a>
-        </span>
+        <span>signal-portraits.vercel.app</span>
       </footer>
     </div>
   );
@@ -87,7 +80,7 @@ function NavFallback() {
         color: "var(--color-mute)",
       }}
     >
-      Gallery · Methodology · Thesis · anefi.vc ↗
+      Gallery · Methodology · Thesis
     </div>
   );
 }
