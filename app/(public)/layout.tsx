@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Wordmark } from "@/components/Wordmark";
+import { Nav } from "@/components/Nav";
 
 export default function PublicLayout({ children }: { children: ReactNode }) {
   return (
@@ -9,6 +10,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-end",
+          gap: 32,
           paddingBottom: 16,
           borderBottom: "2px solid var(--color-ink)",
           marginBottom: 32,
@@ -16,17 +18,26 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       >
         <Wordmark />
         <div
-          className="mono"
           style={{
-            fontSize: 11,
-            color: "var(--color-mute)",
-            textAlign: "right",
-            lineHeight: 1.6,
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            alignItems: "flex-end",
           }}
         >
-          <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>portraits.anefi.vc</b>
-          <br />
-          Sevda Anefi · Signals Over Stories
+          <Nav />
+          <div
+            className="mono"
+            style={{
+              fontSize: 11,
+              color: "var(--color-mute)",
+              textAlign: "right",
+              lineHeight: 1.4,
+            }}
+          >
+            <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>portraits.anefi.vc</b>
+            {" · Sevda Anefi"}
+          </div>
         </div>
       </header>
 
