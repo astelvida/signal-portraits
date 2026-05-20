@@ -171,6 +171,8 @@ function Chip({
 }) {
   return (
     <button
+      className="chip"
+      data-active={active}
       onClick={onClick}
       style={{
         padding: small ? "3px 8px" : "4px 10px",

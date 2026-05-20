@@ -36,6 +36,7 @@ export async function Marquee() {
       }}
     >
       <span
+        className="marquee-live"
         style={{
           color: "var(--color-accent)",
           fontWeight: 700,

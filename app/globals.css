@@ -14,6 +14,10 @@
   --font-mono: var(--font-jetbrains-mono);
 
   --spacing-grid: 4px;
+
+  /* Motion tokens. Short, purposeful, never decorative. */
+  --transition-fast: 120ms ease-out;
+  --transition-medium: 180ms ease-out;
 }
 
 @layer base {
@@ -106,4 +110,69 @@
   body div[style*="repeat(4"] {
     grid-template-columns: 1fr !important;
   }
+}
+
+/* ---------- Microinteractions (Phase 1.6 / Task 24) ----------
+   Editorial-brutalist discipline: information-bearing only. No parallax,
+   no cursor effects, no blooms. Every transition is fast and reversible.
+   All gated behind prefers-reduced-motion: no-preference. */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Filter chips: border ink → accent on hover, +1px lift. Active state
+     (already inverted to ink bg) stays anchored — no hover lift. */
+  .chip {
+    transition:
+      border-color var(--transition-fast),
+      transform var(--transition-fast),
+      color var(--transition-fast),
+      background var(--transition-fast);
+  }
+  .chip:hover:not([data-active="true"]) {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    transform: translateY(-1px);
+  }
+  .chip:active {
+    transform: translateY(0);
+  }
+
+  /* Portrait card: name bolds on hover; portrait contrasts up. No card
+     transform — the brand bans hover blooms. */
+  .portrait-card {
+    transition: background var(--transition-medium);
+  }
+  .portrait-card .portrait-card-name {
+    transition:
+      font-weight var(--transition-medium),
+      color var(--transition-medium);
+  }
+  .portrait-card .portrait-card-art {
+    transition: filter var(--transition-medium);
+  }
+  .portrait-card:hover .portrait-card-name {
+    font-weight: 600;
+  }
+  .portrait-card:hover .portrait-card-art {
+    filter: contrast(1.08);
+  }
+
+  /* Marquee LIVE prefix: single pulse on mount. Subtle, ~600ms, fires
+     once then settles to the accent colour. */
+  .marquee-live {
+    animation: marquee-live-pulse 600ms ease-out 1;
+  }
+  @keyframes marquee-live-pulse {
+    0% { opacity: 1; }
+    35% { opacity: 0.35; }
+    100% { opacity: 1; }
+  }
+}
+
+/* Focus rings — visible for keyboard, hidden for mouse. Vermillion outline,
+   2px offset. Outside the prefers-reduced-motion gate because focus
+   accessibility is non-negotiable. */
+.chip:focus-visible,
+.portrait-card:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
 }

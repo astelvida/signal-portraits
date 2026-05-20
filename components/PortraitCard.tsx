@@ -16,6 +16,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
   return (
     <Link
       href={`/portraits/${company.slug}`}
+      className="portrait-card"
       style={{
         borderRight: "1px solid var(--color-ink)",
         borderBottom: "1px solid var(--color-ink)",
@@ -60,6 +61,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
       </div>
 
       <div
+        className="portrait-card-art"
         style={{
           flex: 1,
           display: "flex",
@@ -82,7 +84,7 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
         }}
       >
         <span
-          className="display"
+          className="display portrait-card-name"
           style={{
             fontStyle: "italic",
             fontSize: 18,
