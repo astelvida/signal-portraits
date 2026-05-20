@@ -63,6 +63,18 @@ export default async function MethodologyPage() {
           A portrait renders in mute mode when the Falsifier Check returns <code className="mono">❌ Triggered</code> or the Anti-thesis Filter returns <code className="mono">Auto-pass</code>. The vermillion is replaced with warm-grey, the pass reason appears in JetBrains Mono at the canvas foot. The portrait still exists. The methodology is honest about its no&rsquo;s.
         </p>
       </section>
+
+      <section style={{ marginTop: 48 }}>
+        <h2 className="display" style={{ fontSize: 28, fontWeight: 500, letterSpacing: "-0.015em", marginBottom: 16 }}>
+          How does this stay live?
+        </h2>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--color-ink-soft)" }}>
+          The Companies database in Notion is the only source of truth. When a row changes, Notion fires a signed webhook at <code className="mono">/api/revalidate</code>. The route verifies the signature against a shared secret, then marks the cached pages stale. The next page load refetches, the SSI score moves, the seed shifts, and the portrait visibly redraws.
+        </p>
+        <p style={{ fontSize: 15, lineHeight: 1.6, color: "var(--color-ink-soft)", marginTop: 12 }}>
+          Edit a row in Notion. The portrait moves. The data tells the story.
+        </p>
+      </section>
     </article>
   );
 }
@@ -76,7 +88,7 @@ function Block({
   kicker: string;
   title: string;
   body: string;
-  dims: ReadonlyArray<{ label: string; max: number }>;
+  dims: ReadonlyArray<{ label: string; max: number; visualNote: string }>;
 }) {
   return (
     <section style={{ marginBottom: 56 }}>
@@ -87,22 +99,52 @@ function Block({
         {title}
       </h2>
       <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--color-ink-soft)", marginBottom: 24 }}>{body}</p>
-      <table className="mono" style={{ width: "100%", fontSize: 12, borderCollapse: "collapse", borderTop: "1px solid var(--color-ink)" }}>
-        <tbody>
-          {dims.map((d) => (
-            <tr key={d.label} style={{ borderBottom: "1px solid var(--color-warm-cream)" }}>
-              <td style={{ padding: "8px 0", color: "var(--color-ink)" }}>{d.label}</td>
-              <td style={{ padding: "8px 0", textAlign: "right", color: "var(--color-mute)" }}>max {d.max}</td>
-            </tr>
-          ))}
-          <tr style={{ borderTop: "2px solid var(--color-ink)" }}>
-            <td style={{ padding: "8px 0", fontWeight: 600 }}>Total</td>
-            <td style={{ padding: "8px 0", textAlign: "right", color: "var(--color-accent)", fontWeight: 700 }}>
-              {dims.reduce((sum, d) => sum + d.max, 0)}
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div
+        className="mono dim-table"
+        style={{ borderTop: "1px solid var(--color-ink)", fontSize: 12 }}
+      >
+        {dims.map((d) => (
+          <div
+            key={d.label}
+            className="dim-row"
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr auto",
+              gap: "2px 16px",
+              padding: "12px 0",
+              borderBottom: "1px solid var(--color-warm-cream)",
+            }}
+          >
+            <span style={{ color: "var(--color-ink)", fontWeight: 500 }}>{d.label}</span>
+            <span style={{ textAlign: "right", color: "var(--color-mute)" }}>max {d.max}</span>
+            <span
+              className="dim-note"
+              style={{
+                gridColumn: "1 / -1",
+                color: "var(--color-mute)",
+                lineHeight: 1.5,
+                fontSize: 11,
+                marginTop: 2,
+              }}
+            >
+              {d.visualNote}
+            </span>
+          </div>
+        ))}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            padding: "12px 0",
+            borderTop: "2px solid var(--color-ink)",
+          }}
+        >
+          <span style={{ fontWeight: 600 }}>Total</span>
+          <span style={{ color: "var(--color-accent)", fontWeight: 700 }}>
+            {dims.reduce((sum, d) => sum + d.max, 0)}
+          </span>
+        </div>
+      </div>
     </section>
   );
 }

@@ -81,6 +81,34 @@ components/
 
 See `docs/PRD.md` for the full product spec and `docs/WIREFRAMES.html` for the visual reference.
 
+## Webhook
+
+The gallery stays live through a signed Notion webhook, not polling.
+
+When a row changes in the Companies or Signals database, Notion POSTs to
+`/api/revalidate` with an HMAC header. The route verifies it against
+`NOTION_WEBHOOK_SECRET`, then calls `updateTag("companies")` so the next
+render refetches and the portrait redraws.
+
+```bash
+# Generate the shared secret once
+openssl rand -hex 32
+```
+
+Set the same value in two places — Vercel env (`NOTION_WEBHOOK_SECRET`)
+and the Notion webhook config (Settings → Connections → integration →
+Webhooks). The webhook URL is `https://portraits.anefi.vc/api/revalidate`;
+subscribe it to the Companies + Signals data sources.
+
+`NOTION_WEBHOOK_SECRET` only verifies webhook signatures. It does not
+authenticate to Notion — that is `NOTION_TOKEN`.
+
+```bash
+# Smoke test: a bad signature must 401
+curl -s -X POST https://portraits.anefi.vc/api/revalidate \
+  -H 'x-notion-signature: sha256=bad' -d '{}' -w '\n%{http_code}\n'
+```
+
 ## Deploy
 
 See `DEPLOY.md`.
