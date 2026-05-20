@@ -10,6 +10,11 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./", import.meta.url)),
+      // `server-only` throws if imported outside an RSC build. Stub it so
+      // server modules (revalidation, mappers) are unit-testable.
+      "server-only": fileURLToPath(
+        new URL("./tests/stubs/server-only.ts", import.meta.url),
+      ),
     },
   },
 });

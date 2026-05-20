@@ -85,28 +85,30 @@ See `docs/PRD.md` for the full product spec and `docs/WIREFRAMES.html` for the v
 
 The gallery stays live through a signed Notion webhook, not polling.
 
-When a row changes in the Companies or Signals database, Notion POSTs to
-`/api/revalidate` with an HMAC header. The route verifies it against
-`NOTION_WEBHOOK_SECRET`, then calls `updateTag("companies")` so the next
-render refetches and the portrait redraws.
+Notion's webhook is **not** a self-generated secret. Setup flow:
+
+1. In Notion: Settings → Connections → your integration → Webhooks → add
+   a subscription with URL `https://<host>/api/revalidate`.
+2. Notion POSTs a one-time challenge `{ verification_token }`. The route
+   returns 200 and logs the token. Read it from `vercel logs`.
+3. Paste that token into Notion's **Verify** form to activate the
+   subscription, **and** set it as the `NOTION_WEBHOOK_SECRET` env var in
+   Vercel. The `verification_token` *is* the HMAC signing key.
+4. Every later event carries `X-Notion-Signature: sha256=<hex>`. The route
+   verifies it against `NOTION_WEBHOOK_SECRET`, then calls
+   `updateTag("companies")` so the next render refetches.
+
+`NOTION_WEBHOOK_SECRET` only verifies webhook signatures, and its value
+must be the `verification_token` Notion generated — not a value you
+invent. `NOTION_TOKEN` is separate: that authenticates the read API.
 
 ```bash
-# Generate the shared secret once
-openssl rand -hex 32
-```
+# Read the verification token from runtime logs after step 2
+vercel logs https://<host> | grep notion-webhook
 
-Set the same value in two places — Vercel env (`NOTION_WEBHOOK_SECRET`)
-and the Notion webhook config (Settings → Connections → integration →
-Webhooks). The webhook URL is `https://portraits.anefi.vc/api/revalidate`;
-subscribe it to the Companies + Signals data sources.
-
-`NOTION_WEBHOOK_SECRET` only verifies webhook signatures. It does not
-authenticate to Notion — that is `NOTION_TOKEN`.
-
-```bash
 # Smoke test: a bad signature must 401
-curl -s -X POST https://portraits.anefi.vc/api/revalidate \
-  -H 'x-notion-signature: sha256=bad' -d '{}' -w '\n%{http_code}\n'
+curl -s -X POST https://<host>/api/revalidate \
+  -H 'x-notion-signature: sha256=bad' -d '{"type":"x"}' -w '\n%{http_code}\n'
 ```
 
 ## Deploy

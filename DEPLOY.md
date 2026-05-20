@@ -11,8 +11,9 @@ In a fresh `.env.local` for local dev, and in the Vercel project env for product
 # Then share the Companies + Signals data sources with the integration.
 NOTION_TOKEN=secret_xxx
 
-# 32-byte hex secret used to verify Notion webhooks.
-# Generate: openssl rand -hex 32
+# The Notion webhook verification_token. NOT self-generated — Notion
+# sends it as a one-time challenge when you create the webhook
+# subscription. See the Webhook section in README.md for the flow.
 NOTION_WEBHOOK_SECRET=...
 
 NEXT_PUBLIC_SITE_URL=https://portraits.anefi.vc
@@ -56,12 +57,19 @@ Wait for SSL provisioning (usually under 5 minutes).
 
 In Notion → Settings → Connections → your integration → Webhooks:
 
-- URL: `https://portraits.anefi.vc/api/revalidate`
-- Method: POST
-- Secret: same value as `NOTION_WEBHOOK_SECRET`
-- Subscribe to: Companies + Signals data source updates
+1. Add a subscription with URL `https://<host>/api/revalidate`, subscribed
+   to the Companies + Signals data sources.
+2. Notion immediately POSTs a one-time `{ verification_token }` challenge.
+   The route returns 200 and logs the token. Retrieve it:
+   `vercel logs https://<host> | grep notion-webhook`
+3. Click **Verify** in the Notion Webhooks tab and paste that token.
+4. Set the same token as the `NOTION_WEBHOOK_SECRET` env var in Vercel
+   (`vercel env` or the dashboard), then redeploy so it takes effect.
 
-Smoke test: edit one company's SSI Score by ±1 in Notion. Within 30s, hit `https://portraits.anefi.vc/portraits/<slug>?_=$(date +%s)`. The portrait should visibly shift (different seed → different structure). The `/api/og/<slug>` should regenerate.
+The `verification_token` is both the verify-form value and the HMAC
+signing key. It is not self-generated.
+
+Smoke test: edit one company's SSI Score by ±1 in Notion. Within 30s, hit `https://<host>/portraits/<slug>?_=$(date +%s)`. The portrait should visibly shift (different seed → different structure). The `/api/og/<slug>` should regenerate.
 
 ## 5. Acceptance criteria
 
