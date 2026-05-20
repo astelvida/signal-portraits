@@ -8,7 +8,8 @@ function sign(body: string, token: string): string {
 }
 
 describe("verifySignature", () => {
-  const token = "secret_tMrlL1qK5vuQAh1b6cZGhFChZTSYJlce98V0pYn7yBl";
+  // Arbitrary non-secret string — HMAC keys are just bytes; this is a test fixture.
+  const token = "test-verification-token-fixture";
   const body = JSON.stringify({ type: "page.updated", entity: { id: "abc" } });
 
   it("accepts a correctly signed body", () => {
