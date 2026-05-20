@@ -6,6 +6,7 @@ import { fetchCompany, fetchSignalsFor } from "@/lib/notion/companies";
 import { Portrait } from "@/lib/portrait";
 import { PortraitKeys } from "@/components/PortraitKeys";
 import { Marquee } from "@/components/Marquee";
+import { SignalTimeline } from "@/components/SignalTimeline";
 import { catalystUrl } from "@/lib/notion/catalysts";
 import { CATALYST_KEYS, isStale } from "@/lib/notion/schema";
 import type { CatalystKey } from "@/lib/notion/schema";
@@ -167,8 +168,6 @@ async function DetailBody({ params }: { params: Promise<Params> }) {
 
           <Section label="Discovery" value={co.discoverySource} />
 
-          <Section label="Signals on file" value={`${signals.length} signal${signals.length === 1 ? "" : "s"}`} />
-
           <div style={{ marginTop: "auto", paddingTop: 16, borderTop: "1px solid var(--color-warm-cream)" }}>
             <Link href="/gallery" className="mono" style={{ fontSize: 11, color: "var(--color-ink)", textDecoration: "none" }}>
               ← back to gallery
@@ -180,6 +179,49 @@ async function DetailBody({ params }: { params: Promise<Params> }) {
             </span>
           </div>
         </aside>
+      </section>
+
+      <section
+        style={{
+          border: "1px solid var(--color-ink)",
+          borderTop: "none",
+          padding: "32px 40px",
+        }}
+      >
+        <header
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            marginBottom: 16,
+            paddingBottom: 12,
+            borderBottom: "1px solid var(--color-ink)",
+          }}
+        >
+          <h2
+            className="display"
+            style={{
+              fontSize: 22,
+              fontWeight: 500,
+              letterSpacing: "-0.01em",
+              lineHeight: 1.1,
+            }}
+          >
+            Signal log
+          </h2>
+          <span
+            className="mono"
+            style={{
+              fontSize: 11,
+              color: "var(--color-mute)",
+              letterSpacing: "0.04em",
+              textTransform: "uppercase",
+            }}
+          >
+            {signals.length} signal{signals.length === 1 ? "" : "s"} on file
+          </span>
+        </header>
+        <SignalTimeline signals={signals} />
       </section>
     </>
   );

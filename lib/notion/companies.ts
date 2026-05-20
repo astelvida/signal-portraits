@@ -6,7 +6,7 @@ import {
   queryDataSource,
 } from "./client";
 import { mapCompany, mapSignal } from "./mappers";
-import { FIXTURE_COMPANIES } from "./fixtures";
+import { FIXTURE_COMPANIES, FIXTURE_SIGNALS } from "./fixtures";
 import type { Company, Signal } from "./schema";
 
 // ---------- All companies (cached, tagged "companies") ----------
@@ -77,7 +77,7 @@ export async function fetchSignalsFor(companyId: string): Promise<Signal[]> {
   cacheTag(`signals:${companyId}`);
   cacheLife({ revalidate: 1800 });
 
-  if (!process.env.NOTION_TOKEN) return [];
+  if (!process.env.NOTION_TOKEN) return FIXTURE_SIGNALS[companyId] ?? [];
 
   const page = await queryDataSource(SIGNALS_DATA_SOURCE_ID, {
     pageSize: 100,

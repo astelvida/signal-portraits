@@ -1,5 +1,5 @@
 import "server-only";
-import type { Company } from "./schema";
+import type { Company, Signal } from "./schema";
 
 /**
  * Local fixtures used when `NOTION_TOKEN` is not set. Lets the app render
@@ -290,3 +290,137 @@ export const FIXTURE_COMPANIES: Company[] = [
     lastSignalDate: "2025-12-15",
   },
 ];
+
+/**
+ * Local signal fixtures keyed by the parent companyId. Used by
+ * fetchSignalsFor when NOTION_TOKEN is absent so the detail-page
+ * timeline has something meaningful to render in dev mode.
+ */
+export const FIXTURE_SIGNALS: Record<string, Signal[]> = {
+  "fx-acme-governance": [
+    {
+      id: "s1",
+      title: "DORA audit pack v2.1 shipped",
+      signalType: "Product",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://acmegov.example/changelog/v2.1",
+      dateDetected: "2026-05-19",
+      detail: "Public changelog adds Article 6 evidence export.",
+      scoreContribution: 3,
+      pipelineCompany: "fx-acme-governance",
+    },
+    {
+      id: "s2",
+      title: "Ex-DNB head of model risk joined as VP Eng",
+      signalType: "Hire",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://www.linkedin.com/in/example",
+      dateDetected: "2026-05-04",
+      detail: "10 years at the Dutch central bank; signed compliance lead.",
+      scoreContribution: 4,
+      pipelineCompany: "fx-acme-governance",
+    },
+    {
+      id: "s3",
+      title: "EU AI Office consultation submission",
+      signalType: "Regulatory",
+      signalStrength: "Medium",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://digital-strategy.ec.europa.eu/example",
+      dateDetected: "2026-04-22",
+      detail: "Submitted feedback on Annex III code-of-practice.",
+      scoreContribution: 2,
+      pipelineCompany: "fx-acme-governance",
+    },
+    {
+      id: "s4",
+      title: "€7.5M seed announced",
+      signalType: "Funding",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://techcrunch.example/acme-seed",
+      dateDetected: "2026-04-12",
+      detail: "Mouro Capital lead; EIC Accelerator co-invest.",
+      scoreContribution: 3,
+      pipelineCompany: "fx-acme-governance",
+    },
+    {
+      id: "s5",
+      title: "CEN-CENELEC JTC 21 working-group contribution",
+      signalType: "Regulatory",
+      signalStrength: "Medium",
+      evidenceQuality: "Verified",
+      sourceUrl: null,
+      dateDetected: "2026-03-28",
+      detail: "Listed as co-author on draft standard.",
+      scoreContribution: 2,
+      pipelineCompany: "fx-acme-governance",
+    },
+  ],
+  "fx-lattice-dev": [
+    {
+      id: "s10",
+      title: "Public commit: agent-trace OTEL exporter",
+      signalType: "Product",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://github.com/lattice/example",
+      dateDetected: "2026-05-15",
+      detail: "OpenTelemetry-compatible trace exporter for agent runs.",
+      scoreContribution: 3,
+      pipelineCompany: "fx-lattice-dev",
+    },
+    {
+      id: "s11",
+      title: "Named pilot with major NL bank",
+      signalType: "Buyer",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: null,
+      dateDetected: "2026-04-30",
+      detail: "Press release names the bank and the scope.",
+      scoreContribution: 4,
+      pipelineCompany: "fx-lattice-dev",
+    },
+    {
+      id: "s12",
+      title: "HITL escalation API public",
+      signalType: "Product",
+      signalStrength: "Medium",
+      evidenceQuality: "Verified",
+      sourceUrl: null,
+      dateDetected: "2026-04-08",
+      detail: "Documented human-in-the-loop API in the public docs.",
+      scoreContribution: 2,
+      pipelineCompany: "fx-lattice-dev",
+    },
+  ],
+  "fx-substrate-fr": [
+    {
+      id: "s20",
+      title: "AMF sandbox graduation",
+      signalType: "Regulatory",
+      signalStrength: "High",
+      evidenceQuality: "Verified",
+      sourceUrl: "https://amf-france.example",
+      dateDetected: "2026-05-10",
+      detail: "Graduated from the French market regulator's sandbox program.",
+      scoreContribution: 3,
+      pipelineCompany: "fx-substrate-fr",
+    },
+    {
+      id: "s21",
+      title: "Bpifrance follow-on lead",
+      signalType: "Funding",
+      signalStrength: "Medium",
+      evidenceQuality: "Verified",
+      sourceUrl: null,
+      dateDetected: "2026-04-18",
+      detail: "Follow-on round signal in Bpifrance portfolio update.",
+      scoreContribution: 2,
+      pipelineCompany: "fx-substrate-fr",
+    },
+  ],
+};
