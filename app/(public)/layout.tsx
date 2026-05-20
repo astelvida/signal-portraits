@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { Wordmark } from "@/components/Wordmark";
 import { Nav } from "@/components/Nav";
 
@@ -25,7 +26,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
             alignItems: "flex-end",
           }}
         >
-          <Nav />
+          <Suspense fallback={<NavFallback />}>
+            <Nav />
+          </Suspense>
           <div
             className="mono"
             style={{
@@ -65,6 +68,26 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
           </a>
         </span>
       </footer>
+    </div>
+  );
+}
+
+// Static placeholder reserving the nav row's height to avoid layout shift
+// while the client component hydrates with pathname-aware styling.
+function NavFallback() {
+  return (
+    <div
+      className="mono"
+      aria-hidden
+      style={{
+        height: 16,
+        fontSize: 11,
+        letterSpacing: "0.06em",
+        textTransform: "uppercase",
+        color: "var(--color-mute)",
+      }}
+    >
+      Gallery · Methodology · Thesis · anefi.vc ↗
     </div>
   );
 }

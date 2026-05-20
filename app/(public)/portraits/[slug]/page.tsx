@@ -5,6 +5,7 @@ import { connection } from "next/server";
 import { fetchCompany, fetchSignalsFor } from "@/lib/notion/companies";
 import { Portrait } from "@/lib/portrait";
 import { PortraitKeys } from "@/components/PortraitKeys";
+import { Marquee } from "@/components/Marquee";
 import { catalystUrl } from "@/lib/notion/catalysts";
 import { CATALYST_KEYS, isStale } from "@/lib/notion/schema";
 import type { CatalystKey } from "@/lib/notion/schema";
@@ -226,9 +227,14 @@ const kbd: React.CSSProperties = {
 
 export default function PortraitPage({ params }: { params: Promise<Params> }) {
   return (
-    <Suspense fallback={<div className="mono" style={{ padding: 64, color: "var(--color-mute)" }}>Loading portrait…</div>}>
-      <DetailBody params={params} />
-    </Suspense>
+    <>
+      <Suspense fallback={null}>
+        <Marquee />
+      </Suspense>
+      <Suspense fallback={<div className="mono" style={{ padding: 64, color: "var(--color-mute)" }}>Loading portrait…</div>}>
+        <DetailBody params={params} />
+      </Suspense>
+    </>
   );
 }
 

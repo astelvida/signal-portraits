@@ -94,12 +94,17 @@ function FeaturedSkeleton() {
 export default function Landing() {
   return (
     <>
+      <Suspense fallback={null}>
+        <Marquee />
+      </Suspense>
+
       <section
         style={{
           display: "grid",
           gridTemplateColumns: "1.2fr 1fr",
           gap: 0,
           border: "1px solid var(--color-ink)",
+          borderTop: "none",
           marginBottom: 0,
         }}
       >
@@ -183,10 +188,6 @@ export default function Landing() {
           </Suspense>
         </div>
       </section>
-
-      <Suspense fallback={null}>
-        <Marquee />
-      </Suspense>
 
       <section
         style={{

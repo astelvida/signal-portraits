@@ -9,6 +9,11 @@ function formatAge(hours: number): string {
   return `${weeks}w`;
 }
 
+/**
+ * Live data strap. Renders above the hero on /, and at the top of /gallery
+ * and /portraits/[slug]. The freshest chunk uses the vermillion accent so
+ * the eye lands on what's most recent.
+ */
 export async function Marquee() {
   const s = await fetchCompaniesSummary();
 
@@ -17,35 +22,50 @@ export async function Marquee() {
       className="mono"
       style={{
         display: "flex",
-        gap: 48,
-        padding: "14px 24px",
+        flexWrap: "wrap",
+        alignItems: "baseline",
+        columnGap: 32,
+        rowGap: 6,
+        padding: "10px 20px",
+        borderTop: "1px solid var(--color-ink)",
         borderBottom: "1px solid var(--color-ink)",
+        background: "var(--color-warm-cream)",
         fontSize: 11,
         color: "var(--color-mute)",
-        whiteSpace: "nowrap",
-        overflow: "hidden",
+        letterSpacing: "0.02em",
       }}
     >
+      <span
+        style={{
+          color: "var(--color-accent)",
+          fontWeight: 700,
+          letterSpacing: "0.08em",
+          textTransform: "uppercase",
+        }}
+      >
+        LIVE
+      </span>
+      <span aria-hidden style={{ color: "var(--color-mute)" }}>·</span>
       <span>
-        <b style={{ color: "var(--color-ink)" }}>{s.total}</b> portraits
+        <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.total}</b> portraits
       </span>
       <span>
-        <b style={{ color: "var(--color-ink)" }}>{s.gao}</b> GAO ·{" "}
-        <b style={{ color: "var(--color-ink)" }}>{s.vsrai}</b> VSRAI ·{" "}
-        <b style={{ color: "var(--color-ink)" }}>{s.both}</b> both
+        <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.gao}</b> GAO ·{" "}
+        <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.vsrai}</b> VSRAI ·{" "}
+        <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.both}</b> both
       </span>
       <span>
-        <b style={{ color: "var(--color-ink)" }}>{s.p0}</b> P0
+        <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.p0}</b> P0
       </span>
       {s.untagged > 0 ? (
         <span>
-          <b style={{ color: "var(--color-ink)" }}>{s.untagged}</b> untagged in Notion
+          <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>{s.untagged}</b> untagged in Notion
         </span>
       ) : null}
       {s.freshestSignalAgeHours !== null ? (
-        <span>
-          Last signal landed{" "}
-          <b style={{ color: "var(--color-ink)" }}>
+        <span style={{ marginLeft: "auto" }}>
+          Last signal{" "}
+          <b style={{ color: "var(--color-accent)", fontWeight: 700 }}>
             {formatAge(s.freshestSignalAgeHours)} ago
           </b>
         </span>

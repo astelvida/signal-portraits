@@ -3,6 +3,7 @@ import { connection } from "next/server";
 import { fetchCompanies } from "@/lib/notion/companies";
 import { GalleryToolbar } from "@/components/GalleryToolbar";
 import { PortraitCard } from "@/components/PortraitCard";
+import { Marquee } from "@/components/Marquee";
 import type { Company } from "@/lib/notion/schema";
 
 interface SearchParams {
@@ -104,10 +105,15 @@ export default function GalleryPage({
   searchParams: Promise<SearchParams>;
 }) {
   return (
-    <section style={{ border: "1px solid var(--color-ink)", borderTop: "none" }}>
-      <Suspense fallback={<GallerySkeleton />}>
-        <GalleryGrid searchParams={searchParams} />
+    <>
+      <Suspense fallback={null}>
+        <Marquee />
       </Suspense>
-    </section>
+      <section style={{ border: "1px solid var(--color-ink)", borderTop: "none" }}>
+        <Suspense fallback={<GallerySkeleton />}>
+          <GalleryGrid searchParams={searchParams} />
+        </Suspense>
+      </section>
+    </>
   );
 }
