@@ -172,6 +172,42 @@ export function synthVSRAIVector(company: Pick<Company, "ssiScore" | "signals">,
   return out as VSRAIVector;
 }
 
+/** Build a typed vector from a raw 8-element array (Notion G1–G8 / V1–V8 order),
+ * clamping each dimension to its PRD cap. */
+function vectorFromArray<K extends string>(
+  dims: ReadonlyArray<{ key: K; max: number }>,
+  arr: number[],
+): Record<K, number> {
+  const out: Partial<Record<K, number>> = {};
+  dims.forEach((d, i) => {
+    const raw = arr[i] ?? 0;
+    out[d.key] = Math.max(0, Math.min(d.max, Math.round(raw)));
+  });
+  return out as Record<K, number>;
+}
+
+/**
+ * Resolve a company's GAO vector: use the live per-dimension scores when the
+ * Scouting Engine has populated them, otherwise the synthetic vector. Seed is
+ * unchanged either way (it stays sha256(slug|thesis|ssi)).
+ */
+export function gaoVector(company: Company, seed: number): GAOVector {
+  if (company.gaoDims) return vectorFromArray(GAO_DIMS, company.gaoDims);
+  return synthGAOVector(company, seed);
+}
+
+export function vsraiVector(company: Company, seed: number): VSRAIVector {
+  if (company.vsraiDims) return vectorFromArray(VSRAI_DIMS, company.vsraiDims);
+  return synthVSRAIVector(company, seed);
+}
+
+/** Whether a company carries live per-dimension scores for its active thesis. */
+export function hasLiveDims(company: Company): boolean {
+  if (company.thesis === "Vertical SoR AI") return company.vsraiDims !== null;
+  if (company.thesis === "Both") return company.gaoDims !== null && company.vsraiDims !== null;
+  return company.gaoDims !== null;
+}
+
 /** Helper for visual mapping: map dimension score linearly into output range. */
 export function dimScale(value: number, max: number, outMin: number, outMax: number): number {
   return scale(value, max, outMin, outMax);

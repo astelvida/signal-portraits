@@ -17,24 +17,9 @@ export const ThesisEnum = z
   ]);
 export type Thesis = "Governed Agentic Ops" | "Vertical SoR AI" | "Both";
 
-// Companies DB Sector taxonomy. PRD §7 listed 12 values; the real DB evolves.
-// We keep the constant array as a TS-side hint for the UI filter chips but
-// the schema accepts any string so new Notion values never break parsing.
-export const KNOWN_SECTORS = [
-  "AI Governance",
-  "FinServices AI",
-  "MedTech AI",
-  "Healthcare AI",
-  "Insurance AI",
-  "Legal AI",
-  "Workflow Infra",
-  "Eval Infra",
-  "Defence AI",
-  "Climate AI",
-  "Public Sector AI",
-  "Other",
-] as const;
-export type Sector = string;
+// Sector was removed from the Companies DB in the SSI v3.0 migration. The
+// gallery facet is now HQ Country (a multi_select), whose values come straight
+// from the live data rather than a fixed TS list.
 
 export const KNOWN_STAGES = [
   "Pre-Seed",
@@ -83,16 +68,13 @@ export const AntithesisFilterEnum = z
   .catch("Not Run");
 export type AntithesisFilter = z.infer<typeof AntithesisFilterEnum>;
 
-export type SourceConfidence = string;
-
 export const CompanySchema = z.object({
   id: z.string().min(1),
   company: z.string().min(1),
   slug: z.string().min(1),
   thesis: ThesisEnum,
-  sector: z.string().default("Other"),
+  hqCountry: z.array(z.string()).default([]),
   stage: z.string().default("Seed"),
-  hq: z.string().nullable().default(""),
   headcount: z.number().int().nullable().default(null),
   founded: z.number().int().nullable().default(null),
   lastRaise: z.string().nullable().default(""),
@@ -102,7 +84,7 @@ export const CompanySchema = z.object({
   discoverySource: z.string().default("manual"),
   falsifierCheck: FalsifierCheckEnum,
   antithesisFilter: AntithesisFilterEnum,
-  sourceConfidence: z.string().default("Medium"),
+  status: z.string().nullable().default(null),
   oneLiner: z.string().nullable().default(""),
   keySignal30d: z.string().nullable().default(""),
   catalystWindowDays: z.number().int().nullable().default(null),
@@ -112,6 +94,11 @@ export const CompanySchema = z.object({
   primaryCatalyst: z.string().nullable().default(null),
   marketMapSubSegment: z.string().nullable().default(null),
   lastSignalDate: z.string().nullable().default(null),
+  // SSI v3.0 per-dimension rubric, in GAO_DIMS / VSRAI_DIMS order. Null until the
+  // Scouting Engine populates G1–G8 / V1–V8; the portrait falls back to a
+  // synthetic vector in that case (lib/portrait/dimensions.ts).
+  gaoDims: z.array(z.number()).length(8).nullable().default(null),
+  vsraiDims: z.array(z.number()).length(8).nullable().default(null),
 });
 export type Company = z.infer<typeof CompanySchema>;
 
@@ -124,8 +111,10 @@ export const SignalSchema = z.object({
   evidenceQuality: z.string().nullable().default(null),
   sourceUrl: z.string().nullable().default(null),
   dateDetected: z.string().nullable().default(null),
+  signalDate: z.string().nullable().default(null),
   detail: z.string().nullable().default(""),
-  scoreContribution: z.number().nullable().default(null),
+  verified: z.boolean().default(false),
+  disqualifying: z.boolean().default(false),
   pipelineCompany: z.string().nullable().default(null), // companyId
 });
 export type Signal = z.infer<typeof SignalSchema>;

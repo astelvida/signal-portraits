@@ -5,19 +5,14 @@ import { useMemo } from "react";
 
 const THESIS = ["all", "gao", "vsrai", "both"] as const;
 const TIERS = ["P0", "P1", "P2", "P3"] as const;
-const SECTORS = [
-  "FinServices AI",
-  "MedTech AI",
-  "Healthcare AI",
-  "Insurance AI",
-  "Legal AI",
-  "AI Governance",
-  "Workflow Infra",
-  "Eval Infra",
-  "Defence AI",
-] as const;
 
-export function GalleryToolbar({ total }: { total: number }) {
+export function GalleryToolbar({
+  total,
+  countries,
+}: {
+  total: number;
+  countries: string[];
+}) {
   // shallow:false makes each chip click trigger a server re-fetch so the
   // grid actually filters. scroll:false keeps the grid in view. history:push
   // lets the back button walk through filter combos.
@@ -30,19 +25,23 @@ export function GalleryToolbar({ total }: { total: number }) {
     "tier",
     parseAsArrayOf(parseAsString).withDefault([]).withOptions(nuqsOpts),
   );
-  const [sectors, setSectors] = useQueryState(
-    "sector",
+  const [selectedCountries, setSelectedCountries] = useQueryState(
+    "country",
     parseAsArrayOf(parseAsString).withDefault([]).withOptions(nuqsOpts),
   );
 
   const toggleTier = (t: string) =>
     setTiers(tiers.includes(t) ? tiers.filter((x) => x !== t) : [...tiers, t]);
-  const toggleSector = (s: string) =>
-    setSectors(sectors.includes(s) ? sectors.filter((x) => x !== s) : [...sectors, s]);
+  const toggleCountry = (c: string) =>
+    setSelectedCountries(
+      selectedCountries.includes(c)
+        ? selectedCountries.filter((x) => x !== c)
+        : [...selectedCountries, c],
+    );
 
   const activeFilterCount = useMemo(
-    () => (thesis !== "all" ? 1 : 0) + tiers.length + sectors.length,
-    [thesis, tiers, sectors],
+    () => (thesis !== "all" ? 1 : 0) + tiers.length + selectedCountries.length,
+    [thesis, tiers, selectedCountries],
   );
 
   return (
@@ -81,17 +80,19 @@ export function GalleryToolbar({ total }: { total: number }) {
         ))}
       </FilterGroup>
 
-      <FilterGroup label="Sector">
-        {SECTORS.map((s) => (
-          <Chip
-            key={s}
-            active={sectors.includes(s)}
-            onClick={() => toggleSector(s)}
-            label={s.replace(" AI", "")}
-            small
-          />
-        ))}
-      </FilterGroup>
+      {countries.length > 0 && (
+        <FilterGroup label="Country">
+          {countries.map((c) => (
+            <Chip
+              key={c}
+              active={selectedCountries.includes(c)}
+              onClick={() => toggleCountry(c)}
+              label={c}
+              small
+            />
+          ))}
+        </FilterGroup>
+      )}
 
       <div
         style={{
@@ -109,7 +110,7 @@ export function GalleryToolbar({ total }: { total: number }) {
               onClick={() => {
                 setThesis("all");
                 setTiers([]);
-                setSectors([]);
+                setSelectedCountries([]);
               }}
               className="mono"
               style={{

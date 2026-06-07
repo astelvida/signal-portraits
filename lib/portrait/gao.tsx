@@ -1,7 +1,7 @@
 import type { Company } from "@/lib/notion/schema";
 import { TOKENS, CANVAS, FONTS } from "./tokens";
 import { makeSeed, mulberry32, pick } from "./seed";
-import { synthGAOVector, dimScale, dimCount, GAO_DIMS } from "./dimensions";
+import { gaoVector, dimScale, dimCount, GAO_DIMS } from "./dimensions";
 
 /**
  * GAO — Governance Grid grammar (PRD §8.1).
@@ -25,7 +25,7 @@ export function GAO({ company, options = {} }: { company: Company; options?: GAO
   const center = size / 2;
   const seed = makeSeed(company.slug, company.thesis, company.ssiScore);
   const rng = mulberry32(seed);
-  const v = synthGAOVector(company, seed);
+  const v = gaoVector(company, seed);
   const accent = options.muted ? TOKENS.MUTE : TOKENS.ACCENT;
   const inkSoft = options.muted ? TOKENS.MUTE : TOKENS.INK;
 

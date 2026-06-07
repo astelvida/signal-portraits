@@ -44,7 +44,7 @@ async function FeaturedPortrait() {
       >
         <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>FEATURED · {co.priority}</b>
         <br />
-        {co.thesis === "Governed Agentic Ops" ? "GAO" : co.thesis === "Vertical SoR AI" ? "VSRAI" : "BOTH"} · {co.sector}
+        {co.thesis === "Governed Agentic Ops" ? "GAO" : co.thesis === "Vertical SoR AI" ? "VSRAI" : "BOTH"}{co.hqCountry.length > 0 ? ` · ${co.hqCountry.join(" · ")}` : ""}
         <br />
         SSI <b style={{ color: "var(--color-accent)" }}>{co.ssiScore}</b>
       </div>

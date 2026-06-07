@@ -12,9 +12,8 @@ const baseFixture = {
   company: "Acme Governance",
   slug: "acme-governance",
   thesis: "Governed Agentic Ops" as const,
-  sector: "FinServices AI" as const,
+  hqCountry: ["United Kingdom"],
   stage: "Seed" as const,
-  hq: "London, UK",
   headcount: 18,
   founded: 2024,
   lastRaise: "€7.5M seed led by Mouro Capital · Jan 2026",
@@ -24,7 +23,7 @@ const baseFixture = {
   discoverySource: "regscan" as const,
   falsifierCheck: "✅ Clean" as const,
   antithesisFilter: "Clear" as const,
-  sourceConfidence: "High" as const,
+  status: "📊 Scored",
   oneLiner: "Runtime governance for autonomous workflows in regulated finance.",
   keySignal30d: "DORA-aligned audit pack shipped 4 Apr 2026.",
   catalystWindowDays: 0,
@@ -34,6 +33,8 @@ const baseFixture = {
   primaryCatalyst: "cat-dora",
   marketMapSubSegment: "mm-gao-banking",
   lastSignalDate: "2026-05-19",
+  gaoDims: null,
+  vsraiDims: null,
 };
 
 describe("CompanySchema", () => {
@@ -52,7 +53,7 @@ describe("CompanySchema", () => {
       company: "Lattice Dev",
       slug: "lattice-dev",
       thesis: "Vertical SoR AI",
-      sector: "MedTech AI",
+      hqCountry: ["Germany"],
       ssiScore: 76,
       signalTier: "🟠 Strong",
       priority: "P1",

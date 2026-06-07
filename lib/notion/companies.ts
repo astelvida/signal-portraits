@@ -25,8 +25,11 @@ async function fetchCompaniesData(): Promise<{
   cacheTag("companies");
   cacheLife({ revalidate: 3600, stale: 60, expire: 86400 });
 
-  // Dev fallback: return fixtures when NOTION_TOKEN is missing.
-  if (!process.env.NOTION_TOKEN) {
+  const forceFixtures = process.env.PORTRAITS_FORCE_FIXTURES === "1";
+  const forceLive = process.env.PORTRAITS_FORCE_LIVE === "1";
+
+  // Serve fixtures when there's no token, or when explicitly forced.
+  if (!process.env.NOTION_TOKEN || forceFixtures) {
     return { companies: FIXTURE_COMPANIES, untagged: 0 };
   }
 
@@ -54,7 +57,15 @@ async function fetchCompaniesData(): Promise<{
     cursor = page.next_cursor ?? undefined;
   } while (cursor);
 
-  return { companies: all, untagged };
+  // The SSI v3.0 columns exist live but aren't scored yet (every score is 0).
+  // Rather than render a gallery of blank SSI-0 portraits, keep serving the
+  // fixtures until the Scouting Engine fills scores in. Once any company is
+  // scored, switch to the scored subset — the gallery then fills in
+  // incrementally with no redeploy. PORTRAITS_FORCE_LIVE bypasses the gate.
+  if (forceLive) return { companies: all, untagged };
+  const scored = all.filter((c) => c.ssiScore > 0);
+  if (scored.length === 0) return { companies: FIXTURE_COMPANIES, untagged };
+  return { companies: scored, untagged };
 }
 
 export async function fetchCompanies(): Promise<Company[]> {
@@ -77,7 +88,15 @@ export async function fetchSignalsFor(companyId: string): Promise<Signal[]> {
   cacheTag(`signals:${companyId}`);
   cacheLife({ revalidate: 1800 });
 
-  if (!process.env.NOTION_TOKEN) return FIXTURE_SIGNALS[companyId] ?? [];
+  // Serve fixture signals when in fixtures mode (no token, forced, or a
+  // fixture company id) so the detail-page timeline stays populated.
+  if (
+    !process.env.NOTION_TOKEN ||
+    process.env.PORTRAITS_FORCE_FIXTURES === "1" ||
+    companyId.startsWith("fx-")
+  ) {
+    return FIXTURE_SIGNALS[companyId] ?? [];
+  }
 
   const page = await queryDataSource(SIGNALS_DATA_SOURCE_ID, {
     pageSize: 100,

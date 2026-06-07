@@ -105,7 +105,7 @@ export async function GET(
         {/* Footer row */}
         <div style={{ display: "flex", width: "100%", justifyContent: "space-between", alignItems: "baseline", fontFamily: "ui-monospace, monospace", fontSize: 14, color: mute }}>
           <span>{tagline}</span>
-          <span>{co?.sector ?? ""}</span>
+          <span>{co?.hqCountry?.join(" · ") ?? ""}</span>
         </div>
       </div>
     ),

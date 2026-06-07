@@ -45,7 +45,8 @@ export function PortraitCard({ company, now }: { company: Company; now: Date }) 
         }}
       >
         <span>
-          {thesisShort[company.thesis] ?? "—"} · {company.sector}
+          {thesisShort[company.thesis] ?? "—"}
+          {company.hqCountry.length > 0 ? ` · ${company.hqCountry.join(" · ")}` : ""}
         </span>
         <span
           style={{

@@ -4,8 +4,9 @@ import { fraunces, dmSans, jetbrainsMono } from "./fonts";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  // `||` (not `??`) so an empty-string env var also falls back — `new URL("")` throws.
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL ?? "https://signal-portraits.vercel.app"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://signal-portraits.vercel.app"
   ),
   title: "Signal Portraits",
   description:

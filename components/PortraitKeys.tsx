@@ -3,7 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import type { Company } from "@/lib/notion/schema";
 import { GAO_DIMS } from "@/lib/portrait/dimensions";
-import { VSRAI_DIMS, synthGAOVector, synthVSRAIVector } from "@/lib/portrait/dimensions";
+import { VSRAI_DIMS, gaoVector, vsraiVector, hasLiveDims } from "@/lib/portrait/dimensions";
 import { makeSeed } from "@/lib/portrait/seed";
 
 /**
@@ -93,18 +93,18 @@ export function PortraitKeys({ company }: { company: Company }) {
 function dimensionRowsFor(company: Company) {
   const seed = makeSeed(company.slug, company.thesis, company.ssiScore);
   if (company.thesis === "Vertical SoR AI") {
-    const v = synthVSRAIVector(company, seed);
+    const v = vsraiVector(company, seed);
     return VSRAI_DIMS.map((d) => ({ label: d.label, score: v[d.key], max: d.max }));
   }
   if (company.thesis === "Both") {
-    const g = synthGAOVector(company, seed);
-    const v = synthVSRAIVector(company, seed);
+    const g = gaoVector(company, seed);
+    const v = vsraiVector(company, seed);
     return [
       ...GAO_DIMS.map((d) => ({ label: `GAO · ${d.label}`, score: g[d.key], max: d.max })),
       ...VSRAI_DIMS.map((d) => ({ label: `VSRAI · ${d.label}`, score: v[d.key], max: d.max })),
     ];
   }
-  const g = synthGAOVector(company, seed);
+  const g = gaoVector(company, seed);
   return GAO_DIMS.map((d) => ({ label: d.label, score: g[d.key], max: d.max }));
 }
 
@@ -145,7 +145,9 @@ function XRayOverlay({ company, onClose }: { company: Company; onClose: () => vo
         </div>
         <h2 className="display" style={{ fontSize: 22, fontStyle: "italic", marginBottom: 8 }}>{company.company}</h2>
         <p className="mono" style={{ fontSize: 11, color: "var(--color-mute)", marginBottom: 24 }}>
-          synthetic dimension vector · per-dimension columns land in Phase 2
+          {hasLiveDims(company)
+            ? "live SSI v3.0 dimension scores"
+            : "synthetic dimension vector · live scores pending in Notion"}
         </p>
         <table className="mono" style={{ width: "100%", fontSize: 12, borderCollapse: "collapse" }}>
           <tbody>

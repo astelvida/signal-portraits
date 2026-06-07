@@ -8,30 +8,54 @@ import {
   retrieveDataSource,
 } from "../lib/notion/client";
 
+// SSI v3.0 contract. These are the live Notion property names the app reads
+// (lib/notion/mappers.ts). Keep in sync when the Companies data source changes.
 const EXPECTED_NOTION_PROPS = [
   "Company",
-  "Thesis",
-  "Sector",
+  "Active Thesis",
   "Stage",
-  "HQ",
+  "HQ Country",
   "Headcount",
   "Founded",
   "Last Raise",
-  "SSI Score",
+  // Score formulas (the headline SSI is derived from these).
+  "Adjusted Active Score",
+  "Active Score",
+  "GAO Score",
+  "VSRAI Score",
+  "Adjusted SSI",
   "Signal Tier",
   "Priority",
   "Discovery Source",
   "Falsifier Check",
   "Anti-thesis Filter",
-  "Source confidence",
+  "Status",
   "One-liner",
   "Key Signal 30d",
   "Catalyst Window (days)",
   "Last verified",
   "Last Scored",
+  "Last Signal Date",
   "Signals",
   "Primary Catalyst",
   "Market Map Sub-Segment",
+  // SSI v3.0 per-dimension rubric.
+  "G1 · Regulatory Embeddedness",
+  "G2 · Runtime Governance",
+  "G3 · Team Fit",
+  "G4 · Velocity",
+  "G5 · Buyer Traction",
+  "G6 · Technical Moat",
+  "G7 · Capital Efficiency",
+  "G8 · Investor Signal",
+  "V1 · SoR Integration Depth",
+  "V2 · Domain Data Advantage",
+  "V3 · Team Domain Pedigree",
+  "V4 · Workflow Lock-In",
+  "V5 · Regulatory Alignment",
+  "V6 · Switching Cost",
+  "V7 · Market Timing",
+  "V8 · Capital Efficiency",
 ];
 
 async function main() {
@@ -46,8 +70,11 @@ async function main() {
   const missing = EXPECTED_NOTION_PROPS.filter((p) => !liveProps.includes(p));
   const extra = liveProps.filter((p) => !EXPECTED_NOTION_PROPS.includes(p));
 
-  if (missing.length === 0 && extra.length === 0) {
-    console.log("OK · Zod schema matches live Notion schema (all 23 expected fields present).");
+  if (missing.length === 0) {
+    console.log(
+      `OK · all ${EXPECTED_NOTION_PROPS.length} expected Notion props present.` +
+        (extra.length ? ` (${extra.length} extra props in Notion, informational)` : ""),
+    );
     process.exit(0);
   }
 

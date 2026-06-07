@@ -35,3 +35,4 @@ coverage/
 # QA artifacts that aren't worth committing
 qa/screenshots/*.png
 !qa/screenshots/.gitkeep
+.env*

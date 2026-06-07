@@ -1,7 +1,7 @@
 import type { Company } from "@/lib/notion/schema";
 import { TOKENS, CANVAS, FONTS } from "./tokens";
 import { makeSeed, mulberry32, pick } from "./seed";
-import { synthVSRAIVector, dimScale, dimCount } from "./dimensions";
+import { vsraiVector, dimScale, dimCount } from "./dimensions";
 
 /**
  * VSRAI — Workflow Gravity grammar (PRD §8.2).
@@ -37,7 +37,7 @@ export function VSRAI({ company, options = {} }: { company: Company; options?: V
   const size = options.size ?? CANVAS.size;
   const seed = makeSeed(company.slug, company.thesis, company.ssiScore);
   const rng = mulberry32(seed);
-  const v = synthVSRAIVector(company, seed);
+  const v = vsraiVector(company, seed);
   const accent = options.muted ? TOKENS.MUTE : TOKENS.ACCENT;
   const inkSoft = options.muted ? TOKENS.MUTE : TOKENS.INK;
 
@@ -59,15 +59,10 @@ export function VSRAI({ company, options = {} }: { company: Company; options?: V
   const barbCount = Math.max(0, Math.min(5, dimCount(rng, v.switchingCost, 10, 0, 5)));
   const tilt = dimScale(v.marketTiming, 8, -2, 14); // degrees, forward lean
 
-  // Catalyst glyph text (rotates margin labels)
-  const catalystText = (() => {
-    if (options.catalystKey && CATALYST_GLYPHS[options.catalystKey]) return CATALYST_GLYPHS[options.catalystKey];
-    const sector = company.sector;
-    if (sector === "MedTech AI" || sector === "Healthcare AI") return "EHDS";
-    if (sector === "FinServices AI" || sector === "Insurance AI") return "DORA";
-    if (sector === "Legal AI") return "GDPR";
-    return "EU AI ACT";
-  })();
+  // Catalyst glyph text. Sector was removed in SSI v3.0, so the catalyst comes
+  // from the caller (detail page derives it from thesis) or defaults to AI ACT.
+  const catalystText =
+    (options.catalystKey && CATALYST_GLYPHS[options.catalystKey]) || "EU AI ACT";
 
   // Build core polygon (faceted, tilted)
   const corePts = Array.from({ length: coreFacets }, (_, i) => {

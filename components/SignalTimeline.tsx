@@ -115,12 +115,8 @@ export function SignalTimeline({ signals }: { signals: Signal[] }) {
                 </span>
               )}
               {s.evidenceQuality && <span>{s.evidenceQuality}</span>}
-              {s.scoreContribution !== null && s.scoreContribution !== 0 && (
-                <span style={{ color: "var(--color-ink)" }}>
-                  {s.scoreContribution > 0 ? "+" : ""}
-                  {s.scoreContribution} SSI
-                </span>
-              )}
+              {s.verified && <span style={{ color: "var(--color-ink)" }}>✓ verified</span>}
+              {s.disqualifying && <span style={{ color: "var(--color-accent)" }}>disqualifying</span>}
             </div>
             {s.detail && (
               <p

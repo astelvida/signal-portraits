@@ -9,7 +9,7 @@ import type { Company } from "@/lib/notion/schema";
 interface SearchParams {
   thesis?: string;
   tier?: string;
-  sector?: string;
+  country?: string;
 }
 
 function filterCompanies(all: Company[], sp: SearchParams): Company[] {
@@ -27,11 +27,17 @@ function filterCompanies(all: Company[], sp: SearchParams): Company[] {
     const tiers = sp.tier.split(",").map((s) => s.trim());
     if (tiers.length > 0) out = out.filter((c) => tiers.includes(c.priority));
   }
-  if (sp.sector) {
-    const sectors = sp.sector.split(",").map((s) => s.trim());
-    if (sectors.length > 0) out = out.filter((c) => sectors.includes(c.sector));
+  if (sp.country) {
+    const countries = sp.country.split(",").map((s) => s.trim());
+    if (countries.length > 0)
+      out = out.filter((c) => c.hqCountry.some((hc) => countries.includes(hc)));
   }
   return out;
+}
+
+/** Distinct HQ countries across the served set, sorted, for the filter chips. */
+function distinctCountries(all: Company[]): string[] {
+  return Array.from(new Set(all.flatMap((c) => c.hqCountry))).sort();
 }
 
 function sortByLastSignal(arr: Company[]): Company[] {
@@ -46,6 +52,7 @@ async function GalleryGrid({ searchParams }: { searchParams: Promise<SearchParam
   await connection();
   const sp = await searchParams;
   const all = await fetchCompanies();
+  const countries = distinctCountries(all);
   const filtered = sortByLastSignal(filterCompanies(all, sp));
   const now = new Date();
 
@@ -67,7 +74,7 @@ async function GalleryGrid({ searchParams }: { searchParams: Promise<SearchParam
 
   return (
     <>
-      <GalleryToolbar total={filtered.length} />
+      <GalleryToolbar total={filtered.length} countries={countries} />
       <div
         style={{
           display: "grid",

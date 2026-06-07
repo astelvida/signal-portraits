@@ -25,15 +25,9 @@ async function DetailBody({ params }: { params: Promise<Params> }) {
 
   const ogHref = `/api/og/${slug}`;
 
-  // Heuristic catalyst key (until per-company catalyst is wired from Notion)
-  const catalyst: CatalystKey =
-    co.sector === "MedTech AI" || co.sector === "Healthcare AI"
-      ? "EHDS"
-      : co.sector === "FinServices AI" || co.sector === "Insurance AI"
-        ? "DORA"
-        : co.sector === "Legal AI"
-          ? "GDPR"
-          : "EU AI Act";
+  // Catalyst key by thesis (Sector was removed in SSI v3.0; per-company catalyst
+  // relation is not yet wired from Notion).
+  const catalyst: CatalystKey = co.thesis === "Vertical SoR AI" ? "GDPR" : "EU AI Act";
 
   return (
     <>
@@ -76,8 +70,8 @@ async function DetailBody({ params }: { params: Promise<Params> }) {
             <span>
               <b style={{ color: "var(--color-ink)", fontWeight: 600 }}>
                 {co.thesis === "Governed Agentic Ops" ? "GAO" : co.thesis === "Vertical SoR AI" ? "VSRAI" : "BOTH"}
-              </b>{" "}
-              · {co.sector}
+              </b>
+              {co.hqCountry.length > 0 ? ` · ${co.hqCountry.join(" · ")}` : ""}
             </span>
             <span>
               SSI <b style={{ color: "var(--color-accent)" }}>{co.ssiScore}</b> · {co.priority}
@@ -124,7 +118,7 @@ async function DetailBody({ params }: { params: Promise<Params> }) {
               {co.company}
             </h1>
             <p className="mono" style={{ fontSize: 11, color: "var(--color-mute)", letterSpacing: "0.04em" }}>
-              {co.hq} · {co.stage} · founded {co.founded ?? "—"} · {co.headcount ?? "?"} people
+              {co.hqCountry.join(", ") || "—"} · {co.stage} · founded {co.founded ?? "—"} · {co.headcount ?? "?"} people
             </p>
           </header>
 
