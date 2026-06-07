@@ -36,3 +36,7 @@ coverage/
 qa/screenshots/*.png
 !qa/screenshots/.gitkeep
 .env*
+
+# Editor / local tooling
+.cursor/
+.claude/worktrees/
